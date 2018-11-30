@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/progress_gray" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/quiz_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="1dp"/>
+    <TextView
+        android:id="@+id/count_down"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:layout_height="40dp"
+        android:layout_gravity="left|bottom"
+        android:layout_marginBottom="60dp"
+        android:layout_marginLeft="20dp"
+        android:text="19:00"/>
+
+    <ImageView
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/answer_tab"
+        android:layout_width="35dp"
+        android:layout_height="40dp"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="60dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/answer_sheet"
+        android:scaleType="fitXY" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom"
+        android:background="@color/med_color_primary"
+        android:text="提   交"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+</FrameLayout>

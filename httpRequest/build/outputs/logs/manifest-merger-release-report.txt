@@ -1,0 +1,83 @@
+-- Merging decision tree log ---
+manifest
+ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:2:1-26:12
+	package
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:3:5-38
+		INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml
+		INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:2:1-26:12
+		INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:2:1-26:12
+		INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:2:11-69
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:5:5-81
+	android:name
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:5:22-78
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:6:5-79
+	android:name
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:6:22-76
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:7:5-76
+	android:name
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:7:22-73
+uses-permission#android.permission.BLUETOOTH
+ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:8:5-68
+	android:name
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:8:22-65
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:10:5-75
+	android:name
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:10:22-72
+application
+ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:12:5-24:19
+	android:supportsRtl
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:17:9-35
+	android:label
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:15:9-41
+	android:roundIcon
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:16:9-54
+	android:icon
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:14:9-43
+	android:allowBackup
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:13:9-35
+	android:theme
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:18:9-40
+activity#com.sunlandgroup.baseui.MainActivity
+ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:19:9-59
+	android:name
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:19:19-47
+activity#com.sunlandgroup.baseui.basetab.BaseTabLayout
+ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:20:9-23:68
+	android:label
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:22:13-65
+	android:theme
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:23:13-56
+	android:name
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml:21:13-50
+uses-sdk
+INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml
+INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml
+INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml
+INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml
+		INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml
+		ADDED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml
+		INJECTED from F:\Projecting\xingchangDemo\xcxw\sunlandlibrary\src\main\AndroidManifest.xml
