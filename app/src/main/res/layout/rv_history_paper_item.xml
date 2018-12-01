@@ -21,52 +21,89 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/paper_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/light_color_primary" />
+            android:text="作答时间" />
 
         <TextView
-
-            android:id="@+id/paper_quiz_nums"
+            android:id="@+id/dtsj"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/history_info_margin_left" />
 
-        <TextView
-            android:id="@+id/paper_total_marks"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="14dp"
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/paper_test_nums"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="答题总耗时" />
 
         <TextView
-            android:id="@+id/paper_average_mark"
+            android:id="@+id/ksms"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/history_info_margin_left"
+            android:textColor="@color/light_color_primary" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="考试成绩" />
+
+        <TextView
+            android:id="@+id/kscj"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/history_info_margin_left"
+            android:textColor="@color/light_color_primary" />
+
+
     </LinearLayout>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal">
 
         <TextView
-            android:textSize="18sp"
-            android:id="@+id/paper_limitation"
+            android:id="@+id/zf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/light_green" />
+            android:text="考试总分" />
 
+        <TextView
+            android:id="@+id/sjzf"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/history_info_margin_left"
+            android:layout_toRightOf="@id/zf" />
+
+        <TextView
+            android:id="@+id/sftg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/light_green"
+            android:textSize="18sp" />
 
     </RelativeLayout>
+
+
 </LinearLayout>
+

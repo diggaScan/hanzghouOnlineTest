@@ -6,13 +6,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.List;
 
-public class MyFragmentAdapter extends FragmentPagerAdapter {
+public class MyFragmentAdapter<T extends Fragment> extends FragmentPagerAdapter {
 
 
-    private List<Fragment> fragments;
+    private List<T> fragments;
 
 
-    public MyFragmentAdapter(FragmentManager fm, List<Fragment> fragments) {
+    public MyFragmentAdapter(FragmentManager fm, List<T> fragments) {
         super(fm);
         this.fragments = fragments;
     }

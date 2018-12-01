@@ -13,20 +13,23 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.sunland.jwyxy.bean.i_error_question.ErrorQuestion;
 import com.sunland.jwyxy.bean.i_paper_detail.ChoiceInfo;
+import com.sunland.jwyxy.bean.i_paper_detail.QuestionInfo;
 import com.sunland.jwyxy.bean.i_submit_paper.SubmitQuestionInfo;
 import com.sunland.jwyxy.config_utils.recycler_config.Rv_Item_decoration;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 
-public class Frg_error_quiz extends Frg_base {
+public class Frg_quiz extends Frg_base {
+
+    private static final int SINGLE_CHOICE = 0;
     public static final String FLAG = "Frg_quiz";
     public static final int TEST = 0;
     public static final int REVIEW = 1;
-    private static final int SINGLE_CHOICE = 0;
+
     @BindView(R.id.choice_list)
     public RecyclerView rv_choice_list;
     @BindView(R.id.quiz_kind)
@@ -37,24 +40,30 @@ public class Frg_error_quiz extends Frg_base {
     public TextView tv_nums;
     @BindView(R.id.question)
     public TextView tv_question;
-    public TextView tv_d;
     @BindView(R.id.pass_line)
     public TextView tv_line;
     @BindView(R.id.tip)
     public TextView tv_tip;
 
+    private boolean hasChoosen = false;//单选或判断时只需判断是否有一个选项被选择
     private Button clicked_btn = null;
 
+    private String kind;
+    private int position;
+    private int quiz_num;
+    private String title;
+    private String[] choices;
 
     private Context mContext;
 
-    private ErrorQuestion questionInfo;
+    private HashMap<Integer, Integer> answer_sheet;
 
+    private QuestionInfo questionInfo;
+    private List<ChoiceInfo> choice_List;
+    private MyChoiceAdapter choices_adapter;
     public String tifl;// // 1单选2多选3判断
     public int seq_num;
     public int total_num;
-    private List<ChoiceInfo> choice_List;
-    private MyChoiceAdapter choices_adapter;
     private SubmitQuestionInfo submitQuestionInfo;
 
     @Override
@@ -67,6 +76,7 @@ public class Frg_error_quiz extends Frg_base {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
+        submitQuestionInfo = new SubmitQuestionInfo();
         return view;
     }
 
@@ -99,6 +109,20 @@ public class Frg_error_quiz extends Frg_base {
         }
     }
 
+
+    public void setQuestion(QuestionInfo question) {
+        this.questionInfo = question;
+        this.tifl = questionInfo.getTifl();
+    }
+
+    public void setNum(int num) {
+        this.total_num = num;
+    }
+
+    public void setSequence(int seq_num) {
+        this.seq_num = seq_num;
+    }
+
     private void changeStyleIfClick(Button button, String btn_id) {
         boolean hasChosen = (boolean) button.getTag();
         switch (tifl) {
@@ -129,7 +153,7 @@ public class Frg_error_quiz extends Frg_base {
                         clicked_btn.setTag(false);
                     }
                     clicked_btn = button;
-                    ((Frg_quiz.CommChannel) mContext).scrollToNext(seq_num, true);
+                    ((CommChannel)mContext).scrollToNext(seq_num,true);
                 }
                 break;
         }
@@ -145,22 +169,24 @@ public class Frg_error_quiz extends Frg_base {
             }
         }
         submitQuestionInfo.setDaxx(sb.toString());
-        ((Frg_quiz.CommChannel) mContext).submitAnswer(submitQuestionInfo, questionInfo.getTmid());
+        ((CommChannel) mContext).submitAnswer(submitQuestionInfo, questionInfo.getTmid());
     }
 
+    public interface CommChannel {
 
-    public void setQuestion(ErrorQuestion question) {
-        this.questionInfo = question;
-        this.tifl = questionInfo.getTifl();
+        void submitAnswer(SubmitQuestionInfo submitQuestionInfo, int tmid);
+
+        void addAnswer(int position, int answer);
+
+        void removeAnswer(int position);
+
+        HashMap<Integer, Integer> getAnswerSheet();
+
+        void notifyDataSetChange();
+
+        void scrollToNext(int position, boolean haschoosen);
     }
 
-    public void setNum(int num) {
-        this.total_num = num;
-    }
-
-    public void setSequence(int seq_num) {
-        this.seq_num = seq_num;
-    }
 
     class MyChoiceAdapter extends RecyclerView.Adapter<MyChoiceAdapter.MyViewHolder> {
         List<ChoiceInfo> dataSet;
@@ -176,7 +202,7 @@ public class Frg_error_quiz extends Frg_base {
         @Override
         public MyChoiceAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
             View view = inflater.inflate(R.layout.rv_choice_list_item, viewGroup, false);
-            return new MyChoiceAdapter.MyViewHolder(view);
+            return new MyViewHolder(view);
         }
 
         @Override
@@ -211,6 +237,5 @@ public class Frg_error_quiz extends Frg_base {
             }
         }
     }
-
 
 }

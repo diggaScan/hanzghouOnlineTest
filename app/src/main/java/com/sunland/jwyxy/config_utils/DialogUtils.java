@@ -25,24 +25,25 @@ public class DialogUtils {
     private TextView tv_description;
     private Button btn_cancel;
     private Button btn_confirm;
+    private View divider;
 
     private OnCancelListener onCancelListener;
     private onConfirmListener onConfirmListener;
 
     private Window mWindow;
 
-    public DialogUtils(Context context){
-        this.mContext=context;
-        mWindow=((AppCompatActivity)mContext).getWindow();
+    public DialogUtils(Context context) {
+        this.mContext = context;
+        mWindow = ((AppCompatActivity) mContext).getWindow();
     }
 
-    public void initDialog(){
-        pop_window=new PopupWindow(mContext);
-        View view=getContentView();
+    public void initDialog() {
+        pop_window = new PopupWindow(mContext);
+        View view = getContentView();
 
-        DisplayMetrics metrics=WindowInfoUtils.getWindowMetrics(mContext);
-        int width=(int)(metrics.widthPixels*0.6f);
-        int height=(int)(width*0.638f);
+        DisplayMetrics metrics = WindowInfoUtils.getWindowMetrics(mContext);
+        int width = (int) (metrics.widthPixels * 0.6f);
+        int height = (int) (width * 0.638f);
 
         pop_window.setBackgroundDrawable(new ColorDrawable());
         pop_window.setOutsideTouchable(false);
@@ -51,25 +52,26 @@ public class DialogUtils {
         pop_window.setContentView(view);
     }
 
-    private View getContentView(){
-        View view= LayoutInflater.from(mContext).inflate(R.layout.online_test_dialog,null);
-        tv_title=view.findViewById(R.id.title);
-        tv_description=view.findViewById(R.id.description);
-        btn_cancel=view.findViewById(R.id.cancel_button);
+    private View getContentView() {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.online_test_dialog, null);
+        tv_title = view.findViewById(R.id.title);
+        tv_description = view.findViewById(R.id.description);
+        btn_cancel = view.findViewById(R.id.cancel_button);
+        divider = view.findViewById(R.id.divide_line);
 
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onCancelListener!=null){
+                if (onCancelListener != null) {
                     onCancelListener.onCancel();
                 }
             }
         });
-        btn_confirm=view.findViewById(R.id.confirm_button);
+        btn_confirm = view.findViewById(R.id.confirm_button);
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onConfirmListener!=null){
+                if (onConfirmListener != null) {
                     onConfirmListener.onConfirm();
                 }
             }
@@ -78,19 +80,24 @@ public class DialogUtils {
         return view;
     }
 
-    public void setTitle(String title){
+    public void setTitle(String title) {
         tv_title.setText(title);
     }
 
-    public void setDescription(String description){
+    public void setDescription(String description) {
         tv_description.setText(description);
     }
 
-    public void show(){
-        pop_window.showAtLocation(mWindow.getDecorView(), Gravity.CENTER,0,0);
+    public void show() {
+        if (onCancelListener == null) {
+            btn_cancel.setVisibility(View.GONE);
+            divider.setVisibility(View.GONE);
+        }
+        pop_window.showAtLocation(mWindow.getDecorView(), Gravity.CENTER, 0, 0);
         dimWindow();
     }
-    public void dismiss(){
+
+    public void dismiss() {
         pop_window.dismiss();
         restoreDimWindow();
     }
@@ -108,6 +115,7 @@ public class DialogUtils {
         mWindow.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         mWindow.setAttributes(lp);
     }
+
     public void setOnCancelListener(OnCancelListener onCancelListener) {
         this.onCancelListener = onCancelListener;
     }
@@ -115,11 +123,12 @@ public class DialogUtils {
     public void setOnConfirmListener(DialogUtils.onConfirmListener onConfirmListener) {
         this.onConfirmListener = onConfirmListener;
     }
-    public interface OnCancelListener{
+
+    public interface OnCancelListener {
         void onCancel();
     }
 
-    public interface onConfirmListener{
+    public interface onConfirmListener {
         void onConfirm();
     }
 }

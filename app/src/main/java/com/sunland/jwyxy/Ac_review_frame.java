@@ -7,8 +7,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,6 +18,9 @@ import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_error_question.ErrorQuestion;
 import com.sunland.jwyxy.bean.i_error_question.ErrorQuestionReqBean;
 import com.sunland.jwyxy.bean.i_error_question.ErrorQuestionResBean;
+import com.sunland.jwyxy.bean.i_submit_paper.SubmitPaperReqBean;
+import com.sunland.jwyxy.bean.i_submit_paper.SubmitQuestionInfo;
+import com.sunland.jwyxy.config_utils.DialogUtils;
 import com.sunland.jwyxy.config_utils.viewpager_config.MyFragmentAdapter;
 import com.sunlandgroup.def.bean.result.ResultBase;
 
@@ -28,7 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class Ac_review_frame extends Ac_base_query implements QuizFragment.CommChannel {
+public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChannel {
 
     public static final String FLAG = "Ac_review_frame";
 
@@ -47,7 +50,7 @@ public class Ac_review_frame extends Ac_base_query implements QuizFragment.CommC
     @BindView(R.id.answer_tab)
     public ImageView iv_tab;
 
-    private MyFragmentAdapter myFragmentAdapter;
+    private MyFragmentAdapter<Frg_error_quiz> myFragmentAdapter;
 
     private HashMap<Integer, Integer> answer_sheet = new HashMap<>();
 
@@ -60,6 +63,7 @@ public class Ac_review_frame extends Ac_base_query implements QuizFragment.CommC
 
     private int ctzl;
     private List<ErrorQuestion> question_list;
+    private SparseArray<SubmitQuestionInfo> sparseArray = new SparseArray<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +89,17 @@ public class Ac_review_frame extends Ac_base_query implements QuizFragment.CommC
                 errorQuestionReqBean.setCtzl(ctzl);
                 errorQuestionReqBean.setJyid(LocalInfo.jyid);
                 return errorQuestionReqBean;
+            case Dictionary.SUBMIT_PAPER_INFO:
+                SubmitPaperReqBean submitPaperReqBean = new SubmitPaperReqBean();
+                assembleBasicObj(submitPaperReqBean);
+                submitPaperReqBean.setJyid(LocalInfo.jyid);
+                submitPaperReqBean.setJymc(LocalInfo.jymc);
+//                submitPaperReqBean.setXfsjid(xfsjid);
+//                for (int i = 0; i < sparseArray.size(); i++) {
+//                    answer_list.add(sparseArray.get(sparseArray.keyAt(i)));
+//                }
+//                submitPaperReqBean.setSubmitQuestionInfo(answer_list);
+                return submitPaperReqBean;
         }
         return null;
     }
@@ -124,16 +139,15 @@ public class Ac_review_frame extends Ac_base_query implements QuizFragment.CommC
     }
 
     private void initViewPager() {
-        List<Fragment> fragments = new ArrayList<>();
+        List<Frg_error_quiz> fragments = new ArrayList<>();
 
         for (int i = 0; i < question_list.size(); i++) {
             Frg_error_quiz error_quiz = new Frg_error_quiz();
             error_quiz.setQuestion(question_list.get(i));
             fragments.add(error_quiz);
         }
-        myFragmentAdapter = new MyFragmentAdapter(getSupportFragmentManager(), fragments);
+        myFragmentAdapter = new MyFragmentAdapter<>(getSupportFragmentManager(), fragments);
         vp_container.setAdapter(myFragmentAdapter);
-
     }
 
     @Override
@@ -179,10 +193,42 @@ public class Ac_review_frame extends Ac_base_query implements QuizFragment.CommC
                 break;
             case R.id.submit:
 //                Ac_main.startActivity(this);
-                finish();
+                submit();
                 break;
 
         }
+    }
+
+    private void submit() {
+        final DialogUtils dialogUtils = new DialogUtils(this);
+        dialogUtils.initDialog();
+        dialogUtils.setTitle("确定要提交试卷?");
+        if (answer_sheet.size() < question_list.size()) {
+            dialogUtils.setDescription("你还有题目未完成");
+        } else {
+            dialogUtils.setDescription("你已完成所有试题");
+        }
+
+        dialogUtils.setOnCancelListener(new DialogUtils.OnCancelListener() {
+            @Override
+            public void onCancel() {
+                dialogUtils.dismiss();
+            }
+        });
+
+        dialogUtils.setOnConfirmListener(new DialogUtils.onConfirmListener() {
+            @Override
+            public void onConfirm() {
+                queryHzydjw(Dictionary.SUBMIT_PAPER_INFO);
+
+            }
+        });
+        dialogUtils.show();
+    }
+
+    @Override
+    public void submitAnswer(SubmitQuestionInfo submitQuestionInfo, int tmid) {
+        sparseArray.put(tmid, submitQuestionInfo);
     }
 
     @Override

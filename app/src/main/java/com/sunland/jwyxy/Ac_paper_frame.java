@@ -1,15 +1,13 @@
 package com.sunland.jwyxy;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,35 +17,26 @@ import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_paper_detail.PaperDetailReqBean;
 import com.sunland.jwyxy.bean.i_paper_detail.PaperDetailResBean;
 import com.sunland.jwyxy.bean.i_paper_detail.QuestionInfo;
+import com.sunland.jwyxy.bean.i_submit_paper.SubmitPaperReqBean;
+import com.sunland.jwyxy.bean.i_submit_paper.SubmitQuestionInfo;
 import com.sunland.jwyxy.config_utils.DialogUtils;
 import com.sunland.jwyxy.config_utils.MyCountDownTimer;
 import com.sunland.jwyxy.config_utils.answer_sheet.AnswerSheet;
 import com.sunland.jwyxy.config_utils.answer_sheet.OnRvItemClickedListener;
 import com.sunland.jwyxy.config_utils.answer_sheet.Rv_answer_sheet_adapter;
 import com.sunland.jwyxy.config_utils.viewpager_config.MyFragmentAdapter;
-import com.sunland.jwyxy.quiz.MyDatabase;
-import com.sunland.jwyxy.quiz.OpenDbHelper;
-import com.sunland.jwyxy.quiz.QuizContent;
-import com.sunland.jwyxy.quiz_result.QuizResult;
-import com.sunland.jwyxy.quiz_result.QuizResultDAO;
 import com.sunlandgroup.def.bean.result.ResultBase;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 
-public class Ac_paper_frame extends Ac_base_query implements QuizFragment.CommChannel {
-
-    public static final String FLAG = "Ac_paper_frame";
-
-
-    private String mTitle;
+public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChannel {
 
     @BindView(R.id.toolbar_title)
     public TextView toolbar_title;
@@ -64,35 +53,28 @@ public class Ac_paper_frame extends Ac_base_query implements QuizFragment.CommCh
     private boolean isTabClicked;
 
     private MyCountDownTimer myCountDownTimer;
-    private MyFragmentAdapter myFragmentAdapter;
+    private MyFragmentAdapter<Frg_quiz> myFragmentAdapter;
     private Rv_answer_sheet_adapter rvanswersheetadapter;
 
     private HashMap<Integer, Integer> answer_sheet = new HashMap<>();
 
+    private SparseArray<SubmitQuestionInfo> sparseArray = new SparseArray<>();
     private AnswerSheet mSheet;
-
-    private int[] answers;
-    private List<String> kinds;
-    private int total_quizzes;
-    private List<String> titles;
-    private List<String[]> choices;
-    private int paper_code;
-
     private int xfsjid;
-
+    private String mTitle;
+    private int kssc;
     private List<QuestionInfo> questionList;
+    private int sjsclx;//有序1 无序2
 
+    private List<SubmitQuestionInfo> answer_list;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initCountDownTimer();
+        answer_list = new ArrayList<>();
         handIntent();
         initToolbar();
-//        getQuizData();
         queryHzydjw(Dictionary.PAPER_DETAIL);
-        initViewPager();
-        initAnswetSheet();
     }
 
     @Override
@@ -108,32 +90,56 @@ public class Ac_paper_frame extends Ac_base_query implements QuizFragment.CommCh
 
     @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
-        PaperDetailReqBean paperDetailReqBean = new PaperDetailReqBean();
-        assembleBasicObj(paperDetailReqBean);
-        paperDetailReqBean.setJyid(LocalInfo.jyid);
-        paperDetailReqBean.setXfsjid(4);
-        return paperDetailReqBean;
+        switch (reqName) {
+            case Dictionary.PAPER_DETAIL:
+                PaperDetailReqBean paperDetailReqBean = new PaperDetailReqBean();
+                assembleBasicObj(paperDetailReqBean);
+                paperDetailReqBean.setJyid(LocalInfo.jyid);
+                paperDetailReqBean.setXfsjid(xfsjid);
+                return paperDetailReqBean;
+            case Dictionary.SUBMIT_PAPER_INFO:
+                SubmitPaperReqBean submitPaperReqBean = new SubmitPaperReqBean();
+                assembleBasicObj(submitPaperReqBean);
+                submitPaperReqBean.setJyid(LocalInfo.jyid);
+                submitPaperReqBean.setJymc(LocalInfo.jymc);
+                submitPaperReqBean.setXfsjid(xfsjid);
+                for (int i = 0; i < sparseArray.size(); i++) {
+                    answer_list.add(sparseArray.get(sparseArray.keyAt(i)));
+                }
+                submitPaperReqBean.setSubmitQuestionInfo(answer_list);
+                return submitPaperReqBean;
+        }
+        return null;
     }
 
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase bean) {
         PaperDetailResBean paperDetailResBean = (PaperDetailResBean) bean;
         questionList = paperDetailResBean.getQuestionInfo();
-        initViewPager();
+        sjsclx = paperDetailResBean.getSjsclx();
+        if (questionList == null || questionList.size() == 0) {
+            final DialogUtils dialogUtils = new DialogUtils(this);
+            dialogUtils.initDialog();
+            dialogUtils.setTitle("还未到开考时间");
+            dialogUtils.setDescription("请查看开考时间");
+            dialogUtils.setOnConfirmListener(new DialogUtils.onConfirmListener() {
+                @Override
+                public void onConfirm() {
+                    dialogUtils.dismiss();
+                    onBackPressed();
+                }
+            });
+            dialogUtils.show();
+        } else {
+            initViewPager();
+            initAnswetSheet();
+            initCountDownTimer();
+        }
     }
 
-    private void getQuizData() {
-        paper_code = 11020;
-        answers = QuizContent.answers;
-        kinds = new ArrayList<>();
-        kinds.add("单选");
-        total_quizzes = QuizContent.titles.length;
-        titles = Arrays.asList(QuizContent.titles);
-        choices = QuizContent.choice;
-    }
 
     private void initCountDownTimer() {
-        myCountDownTimer = new MyCountDownTimer(1200000, 1000, Ac_paper_frame.this, tv_count_down);
+        myCountDownTimer = new MyCountDownTimer(kssc * 60 * 1000, 1000, Ac_paper_frame.this, tv_count_down);
         myCountDownTimer.start();
     }
 
@@ -151,6 +157,8 @@ public class Ac_paper_frame extends Ac_base_query implements QuizFragment.CommCh
             Bundle bundle = intent.getBundleExtra("bundle");
             if (bundle != null) {
                 xfsjid = bundle.getInt("xfsjid", -1);
+                mTitle = bundle.getString("sjmc");
+                kssc = bundle.getInt("kssc");
             }
         }
     }
@@ -162,29 +170,40 @@ public class Ac_paper_frame extends Ac_base_query implements QuizFragment.CommCh
     }
 
     private void initViewPager() {
-        List<Fragment> fragments = new ArrayList<>();
-        for (int i = 0; i < questionList.size(); i++) {
+        List<Frg_quiz> fragments = new ArrayList<>();
 
-            QuizFragment quizFragment = new QuizFragment();
-            quizFragment.setQuestion(questionList.get(i));
-            fragments.add(quizFragment);
+        Collections.sort(questionList);
+        int num = questionList.size();
+        for (int i = 0; i < num; i++) {
+            Frg_quiz frg_quiz = new Frg_quiz();
+            frg_quiz.setQuestion(questionList.get(i));
+            frg_quiz.setSequence(i + 1);
+            frg_quiz.setNum(num);
+            fragments.add(frg_quiz);
         }
-        myFragmentAdapter = new MyFragmentAdapter(getSupportFragmentManager(), fragments);
-        vp_container.setAdapter(myFragmentAdapter);
 
+        myFragmentAdapter = new MyFragmentAdapter<>(getSupportFragmentManager(), fragments);
+        vp_container.setAdapter(myFragmentAdapter);
+        vp_container.setOffscreenPageLimit(1000);
     }
 
     private void initAnswetSheet() {
         mSheet = new AnswerSheet(this);
-        rvanswersheetadapter = new Rv_answer_sheet_adapter(this, answer_sheet, total_quizzes);
+        rvanswersheetadapter = new Rv_answer_sheet_adapter(this, answer_sheet, questionList.size());
         rvanswersheetadapter.setOnRvItemClickedListener(new OnRvItemClickedListener() {
             @Override
             public void onItemSelected(int position) {
                 vp_container.setCurrentItem(position, false);
             }
         });
+
         mSheet.setAdapter(rvanswersheetadapter);
         mSheet.initSheet();
+    }
+
+    @Override
+    public void submitAnswer(SubmitQuestionInfo submitQuestionInfo, int tmid) {
+        sparseArray.put(tmid, submitQuestionInfo);
     }
 
     @Override
@@ -203,15 +222,13 @@ public class Ac_paper_frame extends Ac_base_query implements QuizFragment.CommCh
     }
 
     @Override
-    public void scrollToNext(int position, boolean hasChoosen) {
-        final int pos = position;
-        if (position < total_quizzes && hasChoosen)
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    vp_container.setCurrentItem(pos);
-                }
-            }, 200);
+    public void scrollToNext(final int position, boolean hasChoosen) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                vp_container.setCurrentItem(position);
+            }
+        }, 200);
     }
 
     @OnClick({R.id.back_press, R.id.submit, R.id.answer_tab})
@@ -244,8 +261,6 @@ public class Ac_paper_frame extends Ac_base_query implements QuizFragment.CommCh
             @Override
             public void onCancel() {
                 dialogUtils.dismiss();
-
-
             }
         });
 
@@ -264,52 +279,12 @@ public class Ac_paper_frame extends Ac_base_query implements QuizFragment.CommCh
         rvanswersheetadapter.notifyDataSetChanged();
     }
 
-    private void calculateAndStoreResult() {
-        int marks = 0;
-        int correct_nums = 0;
-        int wrong_nums = 0;
-        StringBuilder correct_quiz = new StringBuilder();
-        StringBuilder wrong_quiz = new StringBuilder();
-        if (!answer_sheet.isEmpty()) {
-            for (Map.Entry<Integer, Integer> entry : answer_sheet.entrySet()) {
-                if (answers[entry.getKey() - 1] == entry.getValue()) {
-                    marks += 10;
-                    correct_nums += 1;
-                    correct_quiz.append("/" + entry.getKey());
-                } else {
-                    wrong_nums += 1;
-                    wrong_quiz.append("/" + entry.getKey());
-                }
-            }
-        }
-        OpenDbHelper.createDb(this);
-        MyDatabase myDatabase = OpenDbHelper.getDb();
-        final QuizResultDAO dao = myDatabase.getQuizResultDao();
-        final QuizResult quizResult = new QuizResult();
-        quizResult.time_stamp = System.currentTimeMillis();
-        quizResult.paper_code = paper_code;
-        quizResult.total_quiz = total_quizzes;
-        quizResult.correct_nums = correct_nums;
-        quizResult.wrong_nums = wrong_nums;
-        quizResult.correct_quiz = correct_quiz.toString();
-        quizResult.wrong_quiz = wrong_quiz.toString();
-        quizResult.mark = marks;
-        Log.d("result", quizResult.toString());
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                dao.insert(quizResult);
-            }
-        }).start();
-//        Ac_main.startActivity(this);
-        finish();
-    }
 
     private void submit() {
         final DialogUtils dialogUtils = new DialogUtils(this);
         dialogUtils.initDialog();
         dialogUtils.setTitle("确定要提交试卷?");
-        if (answer_sheet.size() < total_quizzes) {
+        if (answer_sheet.size() < questionList.size()) {
             dialogUtils.setDescription("你还有题目未完成");
         } else {
             dialogUtils.setDescription("你已完成所有试题");
@@ -325,8 +300,8 @@ public class Ac_paper_frame extends Ac_base_query implements QuizFragment.CommCh
         dialogUtils.setOnConfirmListener(new DialogUtils.onConfirmListener() {
             @Override
             public void onConfirm() {
-                dialogUtils.dismiss();
-                calculateAndStoreResult();
+                queryHzydjw(Dictionary.SUBMIT_PAPER_INFO);
+
             }
         });
         dialogUtils.show();
@@ -351,10 +326,5 @@ public class Ac_paper_frame extends Ac_base_query implements QuizFragment.CommCh
         initDecorView();
     }
 
-    public static void startActivity(Activity activity, Bundle bundle) {
-        Intent intent = new Intent(activity, Ac_paper_frame.class);
-        intent.putExtra(FLAG, bundle);
-        activity.startActivity(intent);
-    }
 
 }

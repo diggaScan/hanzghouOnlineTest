@@ -39,7 +39,6 @@ public class Ac_paper_list extends Ac_base_query {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initToolbar();
-//      initRecycleView();
         handleIntent();
         queryHzydjw(Dictionary.PAPER_LIST);
     }
@@ -76,13 +75,15 @@ public class Ac_paper_list extends Ac_base_query {
     }
 
     public void initRecycleView() {
-
         MyAdapter myAdapter = new MyAdapter(this, paper_list);
         myAdapter.setOnItemClickedListener(new MyAdapter.OnItemClickedListener() {
             @Override
-            public void onClicked(int position, int xfsjid) {
+            public void onClicked(int position) {
+                PaperInfo paperInfo = paper_list.get(position);
                 Bundle bundle = new Bundle();
-                bundle.putInt("xfsjid", xfsjid);
+                bundle.putInt("xfsjid", paperInfo.getXfsjid());
+                bundle.putString("sjmc", paperInfo.getSjmc());
+                bundle.putInt("kssc", paperInfo.getKssc());
                 hop2Activity(Ac_paper_frame.class, bundle);
             }
         });

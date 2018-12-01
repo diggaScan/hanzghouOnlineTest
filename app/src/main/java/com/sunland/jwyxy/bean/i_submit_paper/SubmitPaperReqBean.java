@@ -1,8 +1,10 @@
 package com.sunland.jwyxy.bean.i_submit_paper;
 
+import com.sunland.jwyxy.bean.BaseRequestBean;
+
 import java.util.List;
 
-public class SubmitPaperReqBean {
+public class SubmitPaperReqBean extends BaseRequestBean {
     private String jyid;//警员id
     private String jymc;// 警员名称
     private int xfsjid;// 下发试卷id

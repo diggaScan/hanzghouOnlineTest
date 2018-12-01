@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="quiz_btn_choice_interval">16dp</dimen>
+
+    <!--ac_history-->
+    <dimen name="history_info_margin_left">20dp</dimen>
+
+    <!--ac_paper_list-->
+    <dimen name="margin_left">20dp</dimen>
 </resources>
