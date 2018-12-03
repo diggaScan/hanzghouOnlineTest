@@ -18,6 +18,7 @@ public class Rv_answer_sheet_adapter extends RecyclerView.Adapter<Rv_answer_shee
     private static final int NOT_ANSWER = 0;
 
     private Context mContext;
+    // TODO: 2018/12/3/003 换一种数据结构 ，不要用hashmap
     private HashMap<Integer, Integer> answer_sheet;
     private int quiz_nums;
     private OnRvItemClickedListener onRvItemClickedListener;
@@ -56,6 +57,9 @@ public class Rv_answer_sheet_adapter extends RecyclerView.Adapter<Rv_answer_shee
         if (holder.viewType == ANSWERED) {
             holder.btn_sequence.setBackgroundResource(R.drawable.clicked_quiz_choice_background);
             holder.btn_sequence.setTextColor(Color.WHITE);
+        } else {
+            holder.btn_sequence.setBackgroundResource(R.drawable.quiz_choice_background);
+            holder.btn_sequence.setTextColor(mContext.getResources().getColor(R.color.med_color_primary));
         }
 
     }

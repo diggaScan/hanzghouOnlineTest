@@ -17,7 +17,9 @@ import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_paper_detail.PaperDetailReqBean;
 import com.sunland.jwyxy.bean.i_paper_detail.PaperDetailResBean;
 import com.sunland.jwyxy.bean.i_paper_detail.QuestionInfo;
+import com.sunland.jwyxy.bean.i_submit_paper.ResultQuestionInfo;
 import com.sunland.jwyxy.bean.i_submit_paper.SubmitPaperReqBean;
+import com.sunland.jwyxy.bean.i_submit_paper.SubmitPaperResBean;
 import com.sunland.jwyxy.bean.i_submit_paper.SubmitQuestionInfo;
 import com.sunland.jwyxy.config_utils.DialogUtils;
 import com.sunland.jwyxy.config_utils.MyCountDownTimer;
@@ -51,6 +53,7 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
     @BindView(R.id.answer_tab)
     public ImageView answer_tab;
     private boolean isTabClicked;
+    private boolean hasGetAnswers;
 
     private MyCountDownTimer myCountDownTimer;
     private MyFragmentAdapter<Frg_quiz> myFragmentAdapter;
@@ -63,10 +66,14 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
     private int xfsjid;
     private String mTitle;
     private int kssc;
-    private List<QuestionInfo> questionList;
+    private List<Frg_quiz> fragments;
+    private List<QuestionInfo> questionList;//试卷问题列表
+    private List<SubmitQuestionInfo> answer_list;//提交的答案列表
+    private List<ResultQuestionInfo> result_list;//批改后的题目对错列表
     private int sjsclx;//有序1 无序2
+    private String kscj;//考试成绩
+    private int jgx;//及格线
 
-    private List<SubmitQuestionInfo> answer_list;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,6 +81,7 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
         answer_list = new ArrayList<>();
         handIntent();
         initToolbar();
+        questionList = new ArrayList<>();
         queryHzydjw(Dictionary.PAPER_DETAIL);
     }
 
@@ -87,6 +95,19 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
         return R.layout.ac_paper_frame;
     }
 
+
+    private void handIntent() {
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle bundle = intent.getBundleExtra("bundle");
+            if (bundle != null) {
+                xfsjid = bundle.getInt("xfsjid", -1);
+                mTitle = bundle.getString("sjmc");
+                kssc = bundle.getInt("kssc");
+                jgx = bundle.getInt("jgx");
+            }
+        }
+    }
 
     @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
@@ -103,6 +124,7 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
                 submitPaperReqBean.setJyid(LocalInfo.jyid);
                 submitPaperReqBean.setJymc(LocalInfo.jymc);
                 submitPaperReqBean.setXfsjid(xfsjid);
+
                 for (int i = 0; i < sparseArray.size(); i++) {
                     answer_list.add(sparseArray.get(sparseArray.keyAt(i)));
                 }
@@ -114,31 +136,50 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
 
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase bean) {
-        PaperDetailResBean paperDetailResBean = (PaperDetailResBean) bean;
-        questionList = paperDetailResBean.getQuestionInfo();
-        sjsclx = paperDetailResBean.getSjsclx();
-        if (questionList == null || questionList.size() == 0) {
-            final DialogUtils dialogUtils = new DialogUtils(this);
-            dialogUtils.initDialog();
-            dialogUtils.setTitle("还未到开考时间");
-            dialogUtils.setDescription("请查看开考时间");
-            dialogUtils.setOnConfirmListener(new DialogUtils.onConfirmListener() {
-                @Override
-                public void onConfirm() {
-                    dialogUtils.dismiss();
-                    onBackPressed();
+        switch (reqName) {
+            case Dictionary.PAPER_DETAIL:
+                PaperDetailResBean paperDetailResBean = (PaperDetailResBean) bean;
+                questionList = paperDetailResBean.getQuestionInfo();
+                sjsclx = paperDetailResBean.getSjsclx();
+                if (questionList == null || questionList.size() == 0) {
+                    final DialogUtils dialogUtils = new DialogUtils(this);
+                    dialogUtils.initDialog();
+                    dialogUtils.setTitle("还未到开考时间");
+                    dialogUtils.setDescription("请查看开考时间");
+                    dialogUtils.setOnConfirmListener(new DialogUtils.onConfirmListener() {
+                        @Override
+                        public void onConfirm() {
+                            dialogUtils.dismiss();
+                            onBackPressed();
+                        }
+                    });
+                    dialogUtils.show();
+                } else {
+                    initViewPager();
+                    initAnswetSheet();
+                    initCountDownTimer();
                 }
-            });
-            dialogUtils.show();
-        } else {
-            initViewPager();
-            initAnswetSheet();
-            initCountDownTimer();
+                break;
+            case Dictionary.SUBMIT_PAPER_INFO:
+                hasGetAnswers = true;//以获取答案
+                SubmitPaperResBean submitPaperResBean = (SubmitPaperResBean) bean;
+                result_list = submitPaperResBean.getResultQuestionInfo();
+                kscj = submitPaperResBean.getKscj();
+                for (Frg_quiz frg_quiz : fragments) {
+                    for (ResultQuestionInfo resultQuestionInfo : result_list) {
+                        if (frg_quiz.tmid == resultQuestionInfo.getTmid()) {
+                            frg_quiz.setResult(resultQuestionInfo.getSfzq(), resultQuestionInfo.getZqxx());
+                        }
+                    }
+                }
+                btn_submit.setText("确 定");
         }
+
     }
 
 
     private void initCountDownTimer() {
+        // TODO: 2018/12/3/003 结束后强行提交
         myCountDownTimer = new MyCountDownTimer(kssc * 60 * 1000, 1000, Ac_paper_frame.this, tv_count_down);
         myCountDownTimer.start();
     }
@@ -151,17 +192,6 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
         toolbar.setFitsSystemWindows(false);
     }
 
-    private void handIntent() {
-        Intent intent = getIntent();
-        if (intent != null) {
-            Bundle bundle = intent.getBundleExtra("bundle");
-            if (bundle != null) {
-                xfsjid = bundle.getInt("xfsjid", -1);
-                mTitle = bundle.getString("sjmc");
-                kssc = bundle.getInt("kssc");
-            }
-        }
-    }
 
     private void initToolbar() {
         toolbar_title.setText(mTitle);
@@ -170,18 +200,27 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
     }
 
     private void initViewPager() {
-        List<Frg_quiz> fragments = new ArrayList<>();
+        fragments = new ArrayList<>();
 
         Collections.sort(questionList);
+
         int num = questionList.size();
         for (int i = 0; i < num; i++) {
             Frg_quiz frg_quiz = new Frg_quiz();
-            frg_quiz.setQuestion(questionList.get(i));
+            QuestionInfo questionInfo = questionList.get(i);
+            int tmid = questionInfo.getTmid();
+            frg_quiz.setQuestion(questionInfo);
+            //初始答案
+            SubmitQuestionInfo info = new SubmitQuestionInfo();
+            info.setTmid(tmid);
+            info.setDaxx("");
+            sparseArray.put(tmid, info);
+
             frg_quiz.setSequence(i + 1);
             frg_quiz.setNum(num);
+            frg_quiz.setJgx(jgx);
             fragments.add(frg_quiz);
         }
-
         myFragmentAdapter = new MyFragmentAdapter<>(getSupportFragmentManager(), fragments);
         vp_container.setAdapter(myFragmentAdapter);
         vp_container.setOffscreenPageLimit(1000);
@@ -196,7 +235,6 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
                 vp_container.setCurrentItem(position, false);
             }
         });
-
         mSheet.setAdapter(rvanswersheetadapter);
         mSheet.initSheet();
     }
@@ -239,24 +277,34 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
                 if (isTabClicked) {
                     showAnswerSheet();
                 }
-                backPressed();
+                if (hasGetAnswers) {
+                    exit();
+                } else {
+                    backPressed();
+                }
+
                 break;
             case R.id.submit:
                 if (isTabClicked) {
                     showAnswerSheet();
                 }
-                submit();
+                if (hasGetAnswers) {
+                    exit();
+                } else {
+                    submit();
+                }
+
                 break;
             case R.id.answer_tab:
                 showAnswerSheet();
         }
     }
 
-    public void backPressed() {
+    private void exit() {
         final DialogUtils dialogUtils = new DialogUtils(this);
         dialogUtils.initDialog();
-        dialogUtils.setTitle("确定放弃测试吗?");
-        dialogUtils.setDescription("本次考试将不会被记录");
+        dialogUtils.setTitle("确定退出吗?");
+        dialogUtils.setDescription("本次考试已记录");
         dialogUtils.setOnCancelListener(new DialogUtils.OnCancelListener() {
             @Override
             public void onCancel() {
@@ -274,6 +322,20 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
         dialogUtils.show();
     }
 
+    public void backPressed() {
+        final DialogUtils dialogUtils = new DialogUtils(this);
+        dialogUtils.initDialog();
+        dialogUtils.setTitle("请完成考试?");
+        dialogUtils.setDescription("退出依旧会记录考试成绩");
+        dialogUtils.setOnConfirmListener(new DialogUtils.onConfirmListener() {
+            @Override
+            public void onConfirm() {
+                dialogUtils.dismiss();
+            }
+        });
+        dialogUtils.show();
+    }
+
     @Override
     public void notifyDataSetChange() {
         rvanswersheetadapter.notifyDataSetChanged();
@@ -283,7 +345,7 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
     private void submit() {
         final DialogUtils dialogUtils = new DialogUtils(this);
         dialogUtils.initDialog();
-        dialogUtils.setTitle("确定要提交试卷?");
+        dialogUtils.setTitle("确定要提交试卷!");
         if (answer_sheet.size() < questionList.size()) {
             dialogUtils.setDescription("你还有题目未完成");
         } else {
@@ -300,8 +362,8 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
         dialogUtils.setOnConfirmListener(new DialogUtils.onConfirmListener() {
             @Override
             public void onConfirm() {
+                dialogUtils.dismiss();
                 queryHzydjw(Dictionary.SUBMIT_PAPER_INFO);
-
             }
         });
         dialogUtils.show();
@@ -326,5 +388,8 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
         initDecorView();
     }
 
-
+    @Override
+    public void onBackPressed() {
+        backPressed();
+    }
 }

@@ -43,7 +43,6 @@ public class Ac_main extends CheckSelfPermissionActivity {
     public TextView tv_history;
 
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +103,6 @@ public class Ac_main extends CheckSelfPermissionActivity {
 
     public void initScoreBoard(PersonalStat personalStat) {
 
-
         tv_total_exercise.setText(String.valueOf(personalStat.getDtzs()) + "个");
         tv_accuracy_mean.setText(personalStat.getZql() + "%");
         tv_total_paper.setText(String.valueOf(personalStat.getYzsj()) + "套");
@@ -116,12 +114,12 @@ public class Ac_main extends CheckSelfPermissionActivity {
     @OnClick({R.id.test_container, R.id.review_container, R.id.middle})
     public void onClick(View view) {
         int id = view.getId();
+        Bundle bundle = new Bundle();
         switch (id) {
             case R.id.review_container:
                 Ac_review_mode.startActivity(this);
                 break;
             case R.id.test_container:
-                Bundle bundle = new Bundle();
                 bundle.putString("jyid", LocalInfo.jyid);
                 hop2Activity(Ac_paper_list.class, bundle);
                 break;

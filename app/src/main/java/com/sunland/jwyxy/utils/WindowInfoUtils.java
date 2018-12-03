@@ -22,41 +22,41 @@ public class WindowInfoUtils {
     }
 
 
-	public static int px2dp(Context context,int px){
-		DisplayMetrics displayMetrics=getWindowMetrics(context);
-		return (int)(px/displayMetrics.density);
-	}
-	
-	/**
-	* @return action_bar_height
-	*/
-    public static int getActionBarHeight(Context context){
-        if(context instanceof AppCompatActivity){
-            return ((AppCompatActivity)context).getSupportActionBar().getHeight();
+    public static int px2dp(Context context, int px) {
+        DisplayMetrics displayMetrics = getWindowMetrics(context);
+        return (int) (px / displayMetrics.density);
+    }
+
+    /**
+     * @return action_bar_height
+     */
+    public static int getActionBarHeight(Context context) {
+        if (context instanceof AppCompatActivity) {
+            return ((AppCompatActivity) context).getSupportActionBar().getHeight();
         }
         return -1;
     }
-	
-	/**
-	* @return status_bar_height
-	*/
+
+    /**
+     * @return status_bar_height
+     */
     public static int getStatusBarHeight(Context context) {
         Resources resources = context.getResources();
         int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
         return resources.getDimensionPixelSize(resourceId);
     }
-	
-	/**
-	* @return navigation bar height
-	*/
-	public static int getNavigationBarHeight(Context context) {
-		boolean hasMenuKey = ViewConfiguration.get(context).hasPermanentMenuKey();
-		int resourceId = context.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-		if (resourceId > 0 && !hasMenuKey) {
-			return context.getResources().getDimensionPixelSize(resourceId);
-		}
-		return 0;	
-	}
+
+    /**
+     * @return navigation bar height
+     */
+    public static int getNavigationBarHeight(Context context) {
+        boolean hasMenuKey = ViewConfiguration.get(context).hasPermanentMenuKey();
+        int resourceId = context.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0 && !hasMenuKey) {
+            return context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return 0;
+    }
 
 
 }

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sunland.jwyxy.bean.i_paper_detail.ChoiceInfo;
@@ -25,10 +26,6 @@ import butterknife.BindView;
 
 public class Frg_quiz extends Frg_base {
 
-    private static final int SINGLE_CHOICE = 0;
-    public static final String FLAG = "Frg_quiz";
-    public static final int TEST = 0;
-    public static final int REVIEW = 1;
 
     @BindView(R.id.choice_list)
     public RecyclerView rv_choice_list;
@@ -44,27 +41,25 @@ public class Frg_quiz extends Frg_base {
     public TextView tv_line;
     @BindView(R.id.tip)
     public TextView tv_tip;
-
-    private boolean hasChoosen = false;//单选或判断时只需判断是否有一个选项被选择
+    @BindView(R.id.sfzq)
+    public ImageView iv_sfzq;
+    @BindView(R.id.zqxx)
+    public TextView tv_zqxx;
+    @BindView(R.id.zqxx_des)
+    public TextView tv_zxx_des;
+    public String tifl;// // 1单选2多选3判断
+    public int seq_num;//题序
+    public int total_num;//总题数
+    public int tmid;
+    private int jgx;
     private Button clicked_btn = null;
-
-    private String kind;
-    private int position;
-    private int quiz_num;
-    private String title;
-    private String[] choices;
-
     private Context mContext;
-
     private HashMap<Integer, Integer> answer_sheet;
-
     private QuestionInfo questionInfo;
     private List<ChoiceInfo> choice_List;
     private MyChoiceAdapter choices_adapter;
-    public String tifl;// // 1单选2多选3判断
-    public int seq_num;
-    public int total_num;
     private SubmitQuestionInfo submitQuestionInfo;
+    private int clicked_num = 0;//多选时记录有多少个按钮被点击
 
     @Override
     public void onAttach(Context context) {
@@ -87,9 +82,11 @@ public class Frg_quiz extends Frg_base {
 
     @Override
     public void initWidget() {
+        tmid = questionInfo.getTmid();
         choice_List = questionInfo.getChoiceInfo();
         choices_adapter = new MyChoiceAdapter(choice_List);
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
+        tv_line.setText(jgx + "分");
         rv_choice_list.setAdapter(choices_adapter);
         rv_choice_list.setLayoutManager(manager);
         rv_choice_list.addItemDecoration(new Rv_Item_decoration(mContext));
@@ -123,6 +120,28 @@ public class Frg_quiz extends Frg_base {
         this.seq_num = seq_num;
     }
 
+    public void setResult(int sfzq, String zqxx) {
+        tv_line.setVisibility(View.GONE);
+        tv_tip.setVisibility(View.GONE);
+        iv_sfzq.setVisibility(View.VISIBLE);
+        if (sfzq == 0) {//0为错误
+            iv_sfzq.setImageResource(R.drawable.ic_cross);
+            tv_zxx_des.setVisibility(View.VISIBLE);
+            tv_zqxx.setVisibility(View.VISIBLE);
+            tv_zqxx.setText(zqxx);
+        } else if (sfzq == 1) {//1为正确
+            iv_sfzq.setImageResource(R.drawable.ic_tick);
+        }
+        for (int i = 0; i < rv_choice_list.getChildCount(); i++) {
+            rv_choice_list.getChildAt(i).findViewById(R.id.xxid).setEnabled(false);
+        }
+
+    }
+
+    public void setJgx(int jgx) {
+        this.jgx = jgx;
+    }
+
     private void changeStyleIfClick(Button button, String btn_id) {
         boolean hasChosen = (boolean) button.getTag();
         switch (tifl) {
@@ -131,17 +150,29 @@ public class Frg_quiz extends Frg_base {
                     button.setBackgroundResource(R.drawable.quiz_choice_background);
                     button.setTextColor(getResources().getColor(R.color.med_color_primary));
                     button.setTag(false);
+                    clicked_num--;
+                    if (clicked_num == 0) {
+                        ((CommChannel) mContext).removeAnswer(seq_num);
+                        ((CommChannel) mContext).notifyDataSetChange();
+                    }
                 } else {
+                    clicked_num++;
+                    ((CommChannel) mContext).addAnswer(seq_num, 0);
+                    if (clicked_num == 1) {
+                        ((CommChannel) mContext).notifyDataSetChange();
+                    }
                     button.setBackgroundResource(R.drawable.clicked_quiz_choice_background);
                     button.setTextColor(Color.WHITE);
                     button.setTag(true);
                 }
+
                 break;
             case "1":
             case "3":
                 if (hasChosen) {
                     button.setBackgroundResource(R.drawable.quiz_choice_background);
                     button.setTextColor(getResources().getColor(R.color.med_color_primary));
+                    ((CommChannel) mContext).removeAnswer(seq_num);
                     button.setTag(false);
                 } else {
                     button.setBackgroundResource(R.drawable.clicked_quiz_choice_background);
@@ -153,8 +184,11 @@ public class Frg_quiz extends Frg_base {
                         clicked_btn.setTag(false);
                     }
                     clicked_btn = button;
-                    ((CommChannel)mContext).scrollToNext(seq_num,true);
+                    ((CommChannel) mContext).addAnswer(seq_num, 0);
+                    ((CommChannel) mContext).scrollToNext(seq_num, true);
+
                 }
+                ((CommChannel) mContext).notifyDataSetChange();
                 break;
         }
     }

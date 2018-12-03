@@ -37,11 +37,32 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/tip"
-            android:text="60分"
             android:textColor="@color/red" />
 
         <TextView
+            android:id="@+id/zqxx_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:layout_toRightOf="@id/pass_line"
+            android:text="正确答案"
+            android:textColor="@color/black"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/zqxx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/zqxx_des"
+            android:textColor="@color/device_detail_btn_pressed"
+            android:textSize="18sp"
             android:textStyle="italic"
+            android:visibility="gone" />
+
+        <TextView
             android:id="@+id/current_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,7 +70,8 @@
             android:layout_marginRight="3dp"
             android:layout_toLeftOf="@id/total_quizs"
             android:textColor="@color/light_color_primary"
-            android:textSize="26sp" />
+            android:textSize="26sp"
+            android:textStyle="italic" />
 
         <TextView
             android:id="@+id/total_quizs"
@@ -74,10 +96,24 @@
         android:textColor="@color/black"
         android:textSize="20sp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/choice_list"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/choice_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/sfzq"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="right|bottom"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerInside"
+            android:visibility="gone" />
+    </FrameLayout>
 
 
 </LinearLayout>

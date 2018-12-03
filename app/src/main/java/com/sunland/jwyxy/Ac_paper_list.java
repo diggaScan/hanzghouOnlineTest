@@ -84,6 +84,7 @@ public class Ac_paper_list extends Ac_base_query {
                 bundle.putInt("xfsjid", paperInfo.getXfsjid());
                 bundle.putString("sjmc", paperInfo.getSjmc());
                 bundle.putInt("kssc", paperInfo.getKssc());
+                bundle.putInt("jgx", paperInfo.getJgx());
                 hop2Activity(Ac_paper_frame.class, bundle);
             }
         });

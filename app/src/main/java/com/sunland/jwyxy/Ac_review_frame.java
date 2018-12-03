@@ -71,7 +71,6 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
         handIntent();
         queryHzydjw(Dictionary.ERROR_QUESTION);
         initWidget();
-
     }
 
     @Override
@@ -220,6 +219,7 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
             @Override
             public void onConfirm() {
                 queryHzydjw(Dictionary.SUBMIT_PAPER_INFO);
+
 
             }
         });

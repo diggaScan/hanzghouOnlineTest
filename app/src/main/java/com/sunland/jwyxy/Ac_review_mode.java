@@ -41,7 +41,7 @@ public class Ac_review_mode extends Ac_base {
         return R.layout.ac_review_mode;
     }
 
-    @OnClick({R.id.back_press, R.id.order_container, R.id.random_container, R.id.sequence_container})
+    @OnClick({R.id.back_press, R.id.order_container, R.id.random_container})
     public void onClick(View view) {
         int id = view.getId();
         Bundle bundle = new Bundle();
@@ -57,10 +57,6 @@ public class Ac_review_mode extends Ac_base {
             case R.id.random_container:
                 bundle.putInt("ctzl", 2);//全员错题
                 hop2Activity(Ac_review_frame.class, bundle);
-                break;
-            case R.id.sequence_container:
-                bundle.putString("title", "高频错题");
-                Ac_review_frame.startActivity(this, bundle);
                 break;
         }
     }
