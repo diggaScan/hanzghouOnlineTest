@@ -135,7 +135,6 @@ public class Frg_quiz extends Frg_base {
         for (int i = 0; i < rv_choice_list.getChildCount(); i++) {
             rv_choice_list.getChildAt(i).findViewById(R.id.xxid).setEnabled(false);
         }
-
     }
 
     public void setJgx(int jgx) {

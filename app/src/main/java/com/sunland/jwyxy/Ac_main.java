@@ -83,7 +83,6 @@ public class Ac_main extends CheckSelfPermissionActivity {
                     Toast.makeText(this, "未获得统计数据", Toast.LENGTH_SHORT).show();
                 } else {
                     initScoreBoard(personalStat);
-
                 }
         }
     }

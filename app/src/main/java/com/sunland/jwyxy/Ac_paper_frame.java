@@ -11,6 +11,7 @@ import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sunland.jwyxy.bean.BaseRequestBean;
@@ -52,6 +53,8 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
     public Button btn_submit;
     @BindView(R.id.answer_tab)
     public ImageView answer_tab;
+    @BindView(R.id.loading_icon)
+    public RelativeLayout rl_loading_icon;
     private boolean isTabClicked;
     private boolean hasGetAnswers;
 
@@ -161,7 +164,8 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
                 }
                 break;
             case Dictionary.SUBMIT_PAPER_INFO:
-                hasGetAnswers = true;//以获取答案
+                hasGetAnswers = true;//已获取答案
+                rl_loading_icon.setVisibility(View.GONE);
                 SubmitPaperResBean submitPaperResBean = (SubmitPaperResBean) bean;
                 result_list = submitPaperResBean.getResultQuestionInfo();
                 kscj = submitPaperResBean.getKscj();
@@ -311,12 +315,12 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
                 dialogUtils.dismiss();
             }
         });
-
         dialogUtils.setOnConfirmListener(new DialogUtils.onConfirmListener() {
             @Override
             public void onConfirm() {
                 dialogUtils.dismiss();
-                onBackPressed();
+                hop2Activity(Ac_main.class);
+                finish();
             }
         });
         dialogUtils.show();
@@ -363,7 +367,8 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
             @Override
             public void onConfirm() {
                 dialogUtils.dismiss();
-                queryHzydjw(Dictionary.SUBMIT_PAPER_INFO);
+                queryHzydjwNoDialog(Dictionary.SUBMIT_PAPER_INFO);
+                rl_loading_icon.setVisibility(View.VISIBLE);
             }
         });
         dialogUtils.show();

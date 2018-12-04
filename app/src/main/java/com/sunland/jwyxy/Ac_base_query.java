@@ -33,7 +33,11 @@ public abstract class Ac_base_query extends Ac_base implements OnRequestCallback
                 , assembleRequestObj(reqName), 15000);
         mRequestManager.postRequest();
     }
-
+    public void queryHzydjwNoDialog(String reqName) {
+        mRequestManager.addRequest(Global.ip, Global.port, Global.postfix, reqName
+                , assembleRequestObj(reqName), 15000);
+        mRequestManager.postRequestWithoutDialog();
+    }
     public void assembleBasicObj(BaseRequestBean baseRequestBean) {
         baseRequestBean.setYhdm("test");
         baseRequestBean.setImei(Global.imei);

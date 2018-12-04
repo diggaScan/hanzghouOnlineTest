@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_error_question.ErrorQuestion;
@@ -106,8 +107,17 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase bean) {
         ErrorQuestionResBean errorQuestionResBean = (ErrorQuestionResBean) bean;
-        question_list = errorQuestionResBean.getErrorQuestionInfo();
-        initViewPager();
+        if (errorQuestionResBean != null) {
+            question_list = errorQuestionResBean.getErrorQuestionInfo();
+            if (question_list == null || question_list.isEmpty()) {
+                Toast.makeText(this, "无最近考试列表", Toast.LENGTH_SHORT).show();
+            } else {
+                initViewPager();
+            }
+        } else {
+            Toast.makeText(this, "接口异常", Toast.LENGTH_SHORT).show();
+
+        }
 
     }
 
@@ -170,7 +180,6 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
                     vp_container.setCurrentItem(pos);
                 }
             }, 200);
-
     }
 
     @Override
@@ -207,7 +216,6 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
         } else {
             dialogUtils.setDescription("你已完成所有试题");
         }
-
         dialogUtils.setOnCancelListener(new DialogUtils.OnCancelListener() {
             @Override
             public void onCancel() {
@@ -218,8 +226,8 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
         dialogUtils.setOnConfirmListener(new DialogUtils.onConfirmListener() {
             @Override
             public void onConfirm() {
-                queryHzydjw(Dictionary.SUBMIT_PAPER_INFO);
-
+//                queryHzydjw(Dictionary.SUBMIT_PAPER_INFO);
+                finish();
 
             }
         });

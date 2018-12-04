@@ -28,7 +28,8 @@
             android:layout_marginLeft="30dp"
             android:layout_toRightOf="@+id/quiz_kind"
             android:text="通过分数线:"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:visibility="gone" />
 
 
         <TextView
@@ -71,7 +72,8 @@
             android:layout_toLeftOf="@id/total_quizs"
             android:textColor="@color/light_color_primary"
             android:textSize="26sp"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/total_quizs"
@@ -79,7 +81,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <View
