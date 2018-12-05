@@ -47,7 +47,7 @@ public class Frg_quiz extends Frg_base {
     public TextView tv_zqxx;
     @BindView(R.id.zqxx_des)
     public TextView tv_zxx_des;
-    public String tifl;// // 1单选2多选3判断
+    public String tifl;// // 2单选3多选1判断
     public int seq_num;//题序
     public int total_num;//总题数
     public int tmid;
@@ -94,13 +94,13 @@ public class Frg_quiz extends Frg_base {
         tv_order.setText(seq_num + "");
         tv_question.setText(questionInfo.getTmmc());
         switch (tifl) {
-            case "1":
+            case "2":
                 tv_kind.setText("单选题");
                 break;
-            case "2":
+            case "3":
                 tv_kind.setText("多选题");
                 break;
-            case "3":
+            case "1":
                 tv_kind.setText("判断题");
                 break;
         }

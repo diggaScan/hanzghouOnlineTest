@@ -153,7 +153,7 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
                         @Override
                         public void onConfirm() {
                             dialogUtils.dismiss();
-                            onBackPressed();
+                            finish();
                         }
                     });
                     dialogUtils.show();
@@ -167,6 +167,9 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
                 hasGetAnswers = true;//已获取答案
                 rl_loading_icon.setVisibility(View.GONE);
                 SubmitPaperResBean submitPaperResBean = (SubmitPaperResBean) bean;
+                if (submitPaperResBean == null) {
+                    return;
+                }
                 result_list = submitPaperResBean.getResultQuestionInfo();
                 kscj = submitPaperResBean.getKscj();
                 for (Frg_quiz frg_quiz : fragments) {
@@ -177,8 +180,23 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
                     }
                 }
                 btn_submit.setText("确 定");
+                tv_count_down.setVisibility(View.GONE);
+                final DialogUtils dialogUtils = new DialogUtils(this);
+                dialogUtils.initDialog();
+                dialogUtils.setTitle("本次测验成绩：" + submitPaperResBean.getKscj());
+                dialogUtils.setOnConfirmListener(new DialogUtils.onConfirmListener() {
+                    @Override
+                    public void onConfirm() {
+                        dialogUtils.dismiss();
+                    }
+                });
+                if (submitPaperResBean.getKscj().compareTo(String.valueOf(jgx)) < 0) {
+                    dialogUtils.setDescription("本次测试不及格！");
+                } else {
+                    dialogUtils.setDescription("本次测试通过！");
+                }
+                dialogUtils.show();
         }
-
     }
 
 
@@ -297,7 +315,6 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
                 } else {
                     submit();
                 }
-
                 break;
             case R.id.answer_tab:
                 showAnswerSheet();
@@ -329,7 +346,7 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
     public void backPressed() {
         final DialogUtils dialogUtils = new DialogUtils(this);
         dialogUtils.initDialog();
-        dialogUtils.setTitle("请完成考试?");
+        dialogUtils.setTitle("请完成考试!");
         dialogUtils.setDescription("退出依旧会记录考试成绩");
         dialogUtils.setOnConfirmListener(new DialogUtils.onConfirmListener() {
             @Override
@@ -344,7 +361,6 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
     public void notifyDataSetChange() {
         rvanswersheetadapter.notifyDataSetChanged();
     }
-
 
     private void submit() {
         final DialogUtils dialogUtils = new DialogUtils(this);
