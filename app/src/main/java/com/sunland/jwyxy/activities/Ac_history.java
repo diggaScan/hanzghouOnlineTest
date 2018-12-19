@@ -1,4 +1,4 @@
-package com.sunland.jwyxy;
+package com.sunland.jwyxy.activities;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sunland.jwyxy.V_config;
+import com.sunland.jwyxy.LocalInfo;
+import com.sunland.jwyxy.R;
 import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_history_paper.HistoryPaperInfo;
 import com.sunland.jwyxy.bean.i_history_paper.HistoryPaperReqBean;
@@ -39,7 +42,7 @@ public class Ac_history extends Ac_base_query {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initToolbar();
-        queryHzydjw(Dictionary.HISTORY_PAPER);
+        queryHzydjw(V_config.HISTORY_PAPER);
     }
 
     private void initToolbar() {

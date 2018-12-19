@@ -1,4 +1,4 @@
-package com.sunland.jwyxy;
+package com.sunland.jwyxy.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,7 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.sunland.jwyxy.V_config;
+import com.sunland.jwyxy.LocalInfo;
+import com.sunland.jwyxy.R;
 import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_paper_list.PaperInfo;
 import com.sunland.jwyxy.bean.i_paper_list.PaperListReqBean;
@@ -32,7 +36,6 @@ public class Ac_paper_list extends Ac_base_query {
     @BindView(R.id.recycle_view)
     public RecyclerView rv_papers;
 
-
     private List<PaperInfo> paper_list;
 
     @Override
@@ -40,7 +43,7 @@ public class Ac_paper_list extends Ac_base_query {
         super.onCreate(savedInstanceState);
         initToolbar();
         handleIntent();
-        queryHzydjw(Dictionary.PAPER_LIST);
+        queryHzydjw(V_config.PAPER_LIST);
     }
 
     private void handleIntent() {
@@ -64,7 +67,15 @@ public class Ac_paper_list extends Ac_base_query {
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase bean) {
         PaperListResBean paperListResBean = (PaperListResBean) bean;
+        if (paperListResBean == null) {
+            Toast.makeText(this, "后台接口异常", Toast.LENGTH_SHORT).show();
+            return;
+        }
         paper_list = paperListResBean.getPaperInfo();
+        if (paper_list == null || paper_list.isEmpty()) {
+            Toast.makeText(this, "试卷列表为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
         initRecycleView();
     }
 

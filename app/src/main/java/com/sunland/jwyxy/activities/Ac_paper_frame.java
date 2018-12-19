@@ -1,4 +1,4 @@
-package com.sunland.jwyxy;
+package com.sunland.jwyxy.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,6 +14,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.sunland.jwyxy.V_config;
+import com.sunland.jwyxy.Frg_quiz;
+import com.sunland.jwyxy.LocalInfo;
+import com.sunland.jwyxy.R;
 import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_paper_detail.PaperDetailReqBean;
 import com.sunland.jwyxy.bean.i_paper_detail.PaperDetailResBean;
@@ -85,7 +89,7 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
         handIntent();
         initToolbar();
         questionList = new ArrayList<>();
-        queryHzydjw(Dictionary.PAPER_DETAIL);
+        queryHzydjw(V_config.PAPER_DETAIL);
     }
 
     @Override
@@ -115,13 +119,13 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
     @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
         switch (reqName) {
-            case Dictionary.PAPER_DETAIL:
+            case V_config.PAPER_DETAIL:
                 PaperDetailReqBean paperDetailReqBean = new PaperDetailReqBean();
                 assembleBasicObj(paperDetailReqBean);
                 paperDetailReqBean.setJyid(LocalInfo.jyid);
                 paperDetailReqBean.setXfsjid(xfsjid);
                 return paperDetailReqBean;
-            case Dictionary.SUBMIT_PAPER_INFO:
+            case V_config.SUBMIT_PAPER_INFO:
                 SubmitPaperReqBean submitPaperReqBean = new SubmitPaperReqBean();
                 assembleBasicObj(submitPaperReqBean);
                 submitPaperReqBean.setJyid(LocalInfo.jyid);
@@ -140,7 +144,7 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase bean) {
         switch (reqName) {
-            case Dictionary.PAPER_DETAIL:
+            case V_config.PAPER_DETAIL:
                 PaperDetailResBean paperDetailResBean = (PaperDetailResBean) bean;
                 questionList = paperDetailResBean.getQuestionInfo();
                 sjsclx = paperDetailResBean.getSjsclx();
@@ -163,7 +167,7 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
                     initCountDownTimer();
                 }
                 break;
-            case Dictionary.SUBMIT_PAPER_INFO:
+            case V_config.SUBMIT_PAPER_INFO:
                 hasGetAnswers = true;//已获取答案
                 rl_loading_icon.setVisibility(View.GONE);
                 SubmitPaperResBean submitPaperResBean = (SubmitPaperResBean) bean;
@@ -179,7 +183,7 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
                         }
                     }
                 }
-                btn_submit.setText("确 定");
+                btn_submit.setText("确  定");
                 tv_count_down.setVisibility(View.GONE);
                 final DialogUtils dialogUtils = new DialogUtils(this);
                 dialogUtils.initDialog();
@@ -232,6 +236,7 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
             QuestionInfo questionInfo = questionList.get(i);
             int tmid = questionInfo.getTmid();
             frg_quiz.setQuestion(questionInfo);
+
             //初始答案
             SubmitQuestionInfo info = new SubmitQuestionInfo();
             info.setTmid(tmid);
@@ -383,7 +388,7 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
             @Override
             public void onConfirm() {
                 dialogUtils.dismiss();
-                queryHzydjwNoDialog(Dictionary.SUBMIT_PAPER_INFO);
+                queryHzydjwNoDialog(V_config.SUBMIT_PAPER_INFO);
                 rl_loading_icon.setVisibility(View.VISIBLE);
             }
         });

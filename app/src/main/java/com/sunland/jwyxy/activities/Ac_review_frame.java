@@ -1,4 +1,4 @@
-package com.sunland.jwyxy;
+package com.sunland.jwyxy.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,6 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sunland.jwyxy.V_config;
+import com.sunland.jwyxy.Frg_error_quiz;
+import com.sunland.jwyxy.Frg_quiz;
+import com.sunland.jwyxy.LocalInfo;
+import com.sunland.jwyxy.R;
 import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_error_question.ErrorQuestion;
 import com.sunland.jwyxy.bean.i_error_question.ErrorQuestionReqBean;
@@ -70,7 +75,7 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handIntent();
-        queryHzydjw(Dictionary.ERROR_QUESTION);
+        queryHzydjw(V_config.ERROR_QUESTION);
         initWidget();
     }
 
@@ -83,13 +88,13 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
     @Override
     public BaseRequestBean assembleRequestObj(String reqName) {
         switch (reqName) {
-            case Dictionary.ERROR_QUESTION:
+            case V_config.ERROR_QUESTION:
                 ErrorQuestionReqBean errorQuestionReqBean = new ErrorQuestionReqBean();
                 assembleBasicObj(errorQuestionReqBean);
                 errorQuestionReqBean.setCtzl(ctzl);
                 errorQuestionReqBean.setJyid(LocalInfo.jyid);
                 return errorQuestionReqBean;
-            case Dictionary.SUBMIT_PAPER_INFO:
+            case V_config.SUBMIT_PAPER_INFO:
                 SubmitPaperReqBean submitPaperReqBean = new SubmitPaperReqBean();
                 assembleBasicObj(submitPaperReqBean);
                 submitPaperReqBean.setJyid(LocalInfo.jyid);
@@ -152,11 +157,12 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
 
         for (int i = 0; i < question_list.size(); i++) {
             Frg_error_quiz error_quiz = new Frg_error_quiz();
-            error_quiz.setQuestion(question_list.get(i));
+            error_quiz.setQuestion(question_list.get(i), i + 1, question_list.size());
             fragments.add(error_quiz);
         }
         myFragmentAdapter = new MyFragmentAdapter<>(getSupportFragmentManager(), fragments);
         vp_container.setAdapter(myFragmentAdapter);
+        vp_container.setOffscreenPageLimit(question_list.size());
     }
 
     @Override
@@ -226,7 +232,7 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
         dialogUtils.setOnConfirmListener(new DialogUtils.onConfirmListener() {
             @Override
             public void onConfirm() {
-//                queryHzydjw(Dictionary.SUBMIT_PAPER_INFO);
+//                queryHzydjw(V_config.SUBMIT_PAPER_INFO);
                 finish();
 
             }

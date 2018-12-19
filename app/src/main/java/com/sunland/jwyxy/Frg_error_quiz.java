@@ -50,12 +50,15 @@ public class Frg_error_quiz extends Frg_base {
 
     private ErrorQuestion questionInfo;
 
-    public String tifl;// // 1单选2多选3判断
+    public String tifl;// 1判断2单选3多选
     public int seq_num;
     public int total_num;
     private List<ChoiceInfo> choice_List;
     private MyChoiceAdapter choices_adapter;
     private SubmitQuestionInfo submitQuestionInfo;
+
+    private int order;
+    private int size;
 
     @Override
     public void onAttach(Context context) {
@@ -87,22 +90,26 @@ public class Frg_error_quiz extends Frg_base {
         tv_order.setText(seq_num + "");
         tv_question.setText(questionInfo.getTmmc());
         switch (tifl) {
-            case "1":
+            case "2":
                 tv_kind.setText("单选题");
                 break;
-            case "2":
+            case "3":
                 tv_kind.setText("多选题");
                 break;
-            case "3":
+            case "1":
                 tv_kind.setText("判断题");
                 break;
         }
+
+        tv_order.setText(String.valueOf(order));
+        tv_nums.setText("/" + size);
+        tv_tip.setVisibility(View.GONE);
     }
 
     private void changeStyleIfClick(Button button, String btn_id) {
         boolean hasChosen = (boolean) button.getTag();
         switch (tifl) {
-            case "2"://多选题
+            case "3"://多选题
                 if (hasChosen) {
                     button.setBackgroundResource(R.drawable.quiz_choice_background);
                     button.setTextColor(getResources().getColor(R.color.med_color_primary));
@@ -114,7 +121,7 @@ public class Frg_error_quiz extends Frg_base {
                 }
                 break;
             case "1":
-            case "3":
+            case "2":
                 if (hasChosen) {
                     button.setBackgroundResource(R.drawable.quiz_choice_background);
                     button.setTextColor(getResources().getColor(R.color.med_color_primary));
@@ -149,9 +156,11 @@ public class Frg_error_quiz extends Frg_base {
     }
 
 
-    public void setQuestion(ErrorQuestion question) {
+    public void setQuestion(ErrorQuestion question, int order, int size) {
         this.questionInfo = question;
         this.tifl = questionInfo.getTifl();
+        this.order = order;
+        this.size = size;
     }
 
     public void setNum(int num) {
@@ -188,7 +197,7 @@ public class Frg_error_quiz extends Frg_base {
                 @Override
                 public void onClick(View v) {
                     changeStyleIfClick(myViewHolder.tv_xxid, info.getXxid());
-                    submitAnswer();
+//                    submitAnswer();
                 }
             });
             myViewHolder.tv_xxnr.setText(info.getXxnr());

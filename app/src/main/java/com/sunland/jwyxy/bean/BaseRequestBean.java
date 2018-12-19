@@ -9,15 +9,15 @@ public class BaseRequestBean {
     public String imei;
     public String imsi;
     public String pdaTime;
-    public String gpsx;
+    public String gpsX;
     public String gpsY;
 
-    public String getGpsx() {
-        return gpsx;
+    public String getGpsX() {
+        return gpsX;
     }
 
-    public void setGpsx(String gpsx) {
-        this.gpsx = gpsx;
+    public void setGpsX(String gpsX) {
+        this.gpsX = gpsX;
     }
 
     public String getGpsY() {

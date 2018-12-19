@@ -1,7 +1,9 @@
 package com.sunland.jwyxy;
 
-public class Dictionary {
+public class V_config {
 
+    // 0.登录接口
+    public final static String USER_LOGIN = "queryUsermessage";
     // 1.考试个人统计信息
     public static final String PERSON_STATS = "queryPersonalStatsInfo";
     // 2. 获取考试列表信息

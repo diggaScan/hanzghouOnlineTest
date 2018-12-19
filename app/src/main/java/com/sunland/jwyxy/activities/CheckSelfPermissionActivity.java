@@ -1,4 +1,4 @@
-package com.sunland.jwyxy;
+package com.sunland.jwyxy.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -6,7 +6,8 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+
+import com.sunland.jwyxy.activities.Ac_base_query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public abstract class CheckSelfPermissionActivity extends Ac_base_query {
 
     public static String[] permission_required = {
             Manifest.permission.INTERNET,
-
+            Manifest.permission.READ_PHONE_STATE
     };
 
     private List<String> permission_ungranted = new ArrayList<>();
@@ -24,7 +25,6 @@ public abstract class CheckSelfPermissionActivity extends Ac_base_query {
     @Override
     protected void onResume() {
         super.onResume();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getApplicationInfo().targetSdkVersion >= 23) {
             permission_ungranted.clear();
             addUngrantedPermissions();

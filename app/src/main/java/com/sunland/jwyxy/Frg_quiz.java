@@ -47,7 +47,7 @@ public class Frg_quiz extends Frg_base {
     public TextView tv_zqxx;
     @BindView(R.id.zqxx_des)
     public TextView tv_zxx_des;
-    public String tifl;// // 2单选3多选1判断
+    public String tifl; // 1判断2单选3多选
     public int seq_num;//题序
     public int total_num;//总题数
     public int tmid;
@@ -97,11 +97,11 @@ public class Frg_quiz extends Frg_base {
             case "2":
                 tv_kind.setText("单选题");
                 break;
-            case "3":
-                tv_kind.setText("多选题");
-                break;
             case "1":
                 tv_kind.setText("判断题");
+                break;
+            case "3":
+                tv_kind.setText("多选题");
                 break;
         }
     }
@@ -144,7 +144,7 @@ public class Frg_quiz extends Frg_base {
     private void changeStyleIfClick(Button button, String btn_id) {
         boolean hasChosen = (boolean) button.getTag();
         switch (tifl) {
-            case "2"://多选题
+            case "3"://多选题
                 if (hasChosen) {
                     button.setBackgroundResource(R.drawable.quiz_choice_background);
                     button.setTextColor(getResources().getColor(R.color.med_color_primary));
@@ -164,10 +164,9 @@ public class Frg_quiz extends Frg_base {
                     button.setTextColor(Color.WHITE);
                     button.setTag(true);
                 }
-
                 break;
             case "1":
-            case "3":
+            case "2":
                 if (hasChosen) {
                     button.setBackgroundResource(R.drawable.quiz_choice_background);
                     button.setTextColor(getResources().getColor(R.color.med_color_primary));

@@ -10,15 +10,15 @@ import android.os.Environment;
 public class Global {
     public final static String appName = "ydjw";
     public final static String sdPath = Environment.getExternalStorageDirectory().getPath();
-//    public final static String ip = "20.65.2.12";
-//    public  static String port = "6021";//测试端口6022
+    public final static String ip = "20.65.2.12";
+    public static String port = "3565";//测试端口6022
 //    public final static String postfix = "/xcnwnewsserver/services/newsService";
 //    public final static String portName="newsService";
 
 
     //   http://192.168.1.219:8081/hzydjw/services/IHzydjwService?wsdl
-    public final static String ip = "192.168.1.219";
-    public static String port = "8080";//测试端口6022
+//    public final static String ip = "192.168.1.219";
+//    public static String port = "8080";//测试端口6022
     public final static String postfix = "/hzydjw/services/IHzydjwService";
 
 

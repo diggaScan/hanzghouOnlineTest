@@ -1,4 +1,4 @@
-package com.sunland.jwyxy;
+package com.sunland.jwyxy.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
+import com.sunland.jwyxy.MyApplication;
+import com.sunland.jwyxy.R;
+
 import butterknife.ButterKnife;
 
 public abstract class Ac_base extends AppCompatActivity {
@@ -15,12 +18,13 @@ public abstract class Ac_base extends AppCompatActivity {
     public Toolbar toolbar;
     public LinearLayout container;
     public LinearLayout rootview;
-
+    public MyApplication mApplication;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_base_test);
+        mApplication = (MyApplication) getApplication();
         toolbar = findViewById(R.id.toolbar);
         container = findViewById(R.id.container);
         rootview = findViewById(R.id.rootView);

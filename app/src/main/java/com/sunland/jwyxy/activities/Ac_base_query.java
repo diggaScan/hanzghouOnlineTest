@@ -1,8 +1,9 @@
-package com.sunland.jwyxy;
+package com.sunland.jwyxy.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.sunland.jwyxy.V_config;
 import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_error_question.ErrorQuestionResBean;
 import com.sunland.jwyxy.bean.i_history_paper.HistoryPaperResBean;
@@ -46,7 +47,7 @@ public abstract class Ac_base_query extends Ac_base implements OnRequestCallback
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String pda_time = simpleDateFormat.format(date);
         baseRequestBean.setPdaTime(pda_time);
-        baseRequestBean.setGpsx("");
+        baseRequestBean.setGpsX("");
         baseRequestBean.setGpsY("");
     }
 
@@ -58,17 +59,17 @@ public abstract class Ac_base_query extends Ac_base implements OnRequestCallback
     @Override
     public <T extends ResultBase> Class<?> getBeanClass(String reqId, String reqName) {
         switch (reqName) {
-            case Dictionary.PERSON_STATS:
+            case V_config.PERSON_STATS:
                 return PersonStatsResBean.class;
-            case Dictionary.PAPER_LIST:
+            case V_config.PAPER_LIST:
                 return PaperListResBean.class;
-            case Dictionary.PAPER_DETAIL:
+            case V_config.PAPER_DETAIL:
                 return PaperDetailResBean.class;
-            case Dictionary.ERROR_QUESTION:
+            case V_config.ERROR_QUESTION:
                 return ErrorQuestionResBean.class;
-            case Dictionary.SUBMIT_PAPER_INFO:
+            case V_config.SUBMIT_PAPER_INFO:
                 return SubmitPaperResBean.class;
-            case Dictionary.HISTORY_PAPER:
+            case V_config.HISTORY_PAPER:
                 return HistoryPaperResBean.class;
         }
         return null;

@@ -1,4 +1,4 @@
-package com.sunland.jwyxy;
+package com.sunland.jwyxy.activities;
 
 import android.graphics.Color;
 import android.os.Build;
@@ -10,6 +10,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sunland.jwyxy.V_config;
+import com.sunland.jwyxy.LocalInfo;
+import com.sunland.jwyxy.R;
 import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_person_stats.PersonStatsReqBean;
 import com.sunland.jwyxy.bean.i_person_stats.PersonStatsResBean;
@@ -49,7 +52,7 @@ public class Ac_main extends CheckSelfPermissionActivity {
         toolbar_title.setText("警务云学院");
         iv_nav_back.setVisibility(View.GONE);
         initWindow();
-        queryHzydjw(Dictionary.PERSON_STATS);
+        queryHzydjw(V_config.PERSON_STATS);
 
     }
 
@@ -76,7 +79,7 @@ public class Ac_main extends CheckSelfPermissionActivity {
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase bean) {
         switch (reqName) {
-            case Dictionary.PERSON_STATS:
+            case V_config.PERSON_STATS:
                 PersonStatsResBean personStatsResBean = (PersonStatsResBean) bean;
                 PersonalStat personalStat = personStatsResBean.getPersonalStats();
                 if (personalStat == null) {
