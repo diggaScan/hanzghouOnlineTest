@@ -10,8 +10,10 @@ import android.widget.LinearLayout;
 
 import com.sunland.jwyxy.MyApplication;
 import com.sunland.jwyxy.R;
+import com.sunland.jwyxy.utils.DialogUtils;
 
 import butterknife.ButterKnife;
+import cn.com.cybertech.pdk.OperationLog;
 
 public abstract class Ac_base extends AppCompatActivity {
 
@@ -19,6 +21,9 @@ public abstract class Ac_base extends AppCompatActivity {
     public LinearLayout container;
     public LinearLayout rootview;
     public MyApplication mApplication;
+    public DialogUtils dialogUtils;
+
+    private LayoutInflater layoutInflater;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,15 +36,41 @@ public abstract class Ac_base extends AppCompatActivity {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
-        LayoutInflater layoutInflater = LayoutInflater.from(this);
-        layoutInflater.inflate(setToolbarLayout(), toolbar, true);
-        layoutInflater.inflate(setContentLayut(), container, true);
+        layoutInflater = LayoutInflater.from(this);
+        dialogUtils = DialogUtils.getInstance();
+    }
+
+    public void setToolbarLayout(int layout) {
+        layoutInflater.inflate(layout, toolbar, true);
+    }
+
+    public void setContentLayout(int layout) {
+        layoutInflater.inflate(layout, container, true);
         ButterKnife.bind(this);
     }
 
-    public abstract int setToolbarLayout();
 
-    public abstract int setContentLayut();
+    public void saveLog(int operateType, int operationResult, String operateCondition) {
+        OperationLog.saveLog(this
+                , getTitle().toString()
+                , "com.sunland.jwyxy"
+                , "jwyxy"
+                , operateType
+                , OperationLog.OperationResult.CODE_SUCCESS
+                , 1
+                , operateCondition);
+    }
+
+    public String appendString(String... strings) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < strings.length; i++) {
+            sb.append(strings[i]);
+            if (i != strings.length - 1) {
+                sb.append("@");
+            }
+        }
+        return sb.toString();
+    }
 
     public void hop2Activity(Class<? extends Ac_base> clazz) {
         Intent intent = new Intent(this, clazz);

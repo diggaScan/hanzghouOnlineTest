@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sunland.jwyxy.V_config;
-import com.sunland.jwyxy.LocalInfo;
 import com.sunland.jwyxy.R;
 import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_history_paper.HistoryPaperInfo;
@@ -41,6 +40,8 @@ public class Ac_history extends Ac_base_query {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setToolbarLayout(R.layout.toolbar_test_main);
+        setContentLayout(R.layout.ac_history);
         initToolbar();
         queryHzydjw(V_config.HISTORY_PAPER);
     }
@@ -55,19 +56,10 @@ public class Ac_history extends Ac_base_query {
     public BaseRequestBean assembleRequestObj(String reqName) {
         HistoryPaperReqBean historyPaperReqBean = new HistoryPaperReqBean();
         assembleBasicObj(historyPaperReqBean);
-        historyPaperReqBean.setJyid(LocalInfo.jyid);
+        historyPaperReqBean.setJyid(V_config.jyid);
         return historyPaperReqBean;
     }
 
-    @Override
-    public int setToolbarLayout() {
-        return R.layout.toolbar_test_main;
-    }
-
-    @Override
-    public int setContentLayut() {
-        return R.layout.ac_history;
-    }
 
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase bean) {

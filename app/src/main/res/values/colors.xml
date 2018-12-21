@@ -32,4 +32,5 @@
     <color name="device_detail_recycler">#a29c9c</color>
     <color name="device_detail_recycler_divider">#e0737272</color>
     <color name="ac_main_history_pressed_bkg">#d9c51d</color>
+
 </resources>

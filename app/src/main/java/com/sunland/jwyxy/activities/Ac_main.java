@@ -3,6 +3,7 @@ package com.sunland.jwyxy.activities;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sunland.jwyxy.V_config;
-import com.sunland.jwyxy.LocalInfo;
 import com.sunland.jwyxy.R;
 import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_person_stats.PersonStatsReqBean;
@@ -22,7 +22,7 @@ import com.sunlandgroup.def.bean.result.ResultBase;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class Ac_main extends CheckSelfPermissionActivity {
+public class Ac_main extends Ac_base_query {
 
     @BindView(R.id.test)
     public TextView textView;
@@ -45,10 +45,12 @@ public class Ac_main extends CheckSelfPermissionActivity {
     @BindView(R.id.middle)
     public TextView tv_history;
 
-
+    private int backPressed_num = 0;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setToolbarLayout(R.layout.toolbar_test_main);
+        setContentLayout(R.layout.ac_test_main);
         toolbar_title.setText("警务云学院");
         iv_nav_back.setVisibility(View.GONE);
         initWindow();
@@ -60,21 +62,10 @@ public class Ac_main extends CheckSelfPermissionActivity {
     public BaseRequestBean assembleRequestObj(String reqName) {
         PersonStatsReqBean personStatsReqBean = new PersonStatsReqBean();
         assembleBasicObj(personStatsReqBean);
-        personStatsReqBean.setJyid(LocalInfo.jyid);
-        personStatsReqBean.setJymc("test");
+        personStatsReqBean.setJyid(V_config.jyid);
+        personStatsReqBean.setJymc(V_config.jymc);
         return personStatsReqBean;
     }
-
-    @Override
-    public int setToolbarLayout() {
-        return R.layout.toolbar_test_main;
-    }
-
-    @Override
-    public int setContentLayut() {
-        return R.layout.ac_test_main;
-    }
-
 
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase bean) {
@@ -122,7 +113,7 @@ public class Ac_main extends CheckSelfPermissionActivity {
                 Ac_review_mode.startActivity(this);
                 break;
             case R.id.test_container:
-                bundle.putString("jyid", LocalInfo.jyid);
+                bundle.putString("jyid", V_config.jyid);
                 hop2Activity(Ac_paper_list.class, bundle);
                 break;
             case R.id.middle:
@@ -130,5 +121,19 @@ public class Ac_main extends CheckSelfPermissionActivity {
                 break;
         }
     }
-
+    @Override
+    public void onBackPressed() {
+        if (backPressed_num != 1) {
+            backPressed_num++;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    backPressed_num--;
+                }
+            }, 2500);
+            Toast.makeText(this, "再按一次，退出应用", Toast.LENGTH_SHORT).show();
+        } else {
+            finish();
+        }
+    }
 }

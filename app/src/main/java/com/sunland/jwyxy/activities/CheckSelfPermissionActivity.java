@@ -7,16 +7,16 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
-import com.sunland.jwyxy.activities.Ac_base_query;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CheckSelfPermissionActivity extends Ac_base_query {
+public abstract class CheckSelfPermissionActivity extends Ac_base {
 
     public static String[] permission_required = {
-            Manifest.permission.INTERNET,
-            Manifest.permission.READ_PHONE_STATE
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.INTERNET
     };
 
     private List<String> permission_ungranted = new ArrayList<>();

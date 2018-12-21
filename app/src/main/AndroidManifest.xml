@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".MyApplication"
@@ -24,13 +26,19 @@
             android:value="${PLATEFORM_VALUE}" />
 
         <activity
-            android:name=".activities.Ac_main"
-            android:launchMode="singleTask">
+            android:name=".activities.Ac_splash"
+            android:theme="@style/AppTheme.splash">
             <intent-filter>
                 <action android:name="${PLATEFORM_VALUE}.intent.action.MAIN" />
                 <category android:name="${PLATEFORM_VALUE}.intent.category.${CATEGORY_VALUE}" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.Ac_login"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".activities.Ac_main"
+            android:launchMode="singleTask" />
         <activity android:name=".activities.Ac_paper_list" />
         <activity android:name=".activities.Ac_paper_frame" />
         <activity android:name=".activities.Ac_review_mode" />

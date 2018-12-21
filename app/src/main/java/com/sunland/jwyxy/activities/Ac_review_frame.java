@@ -15,11 +15,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sunland.jwyxy.V_config;
 import com.sunland.jwyxy.Frg_error_quiz;
 import com.sunland.jwyxy.Frg_quiz;
-import com.sunland.jwyxy.LocalInfo;
 import com.sunland.jwyxy.R;
+import com.sunland.jwyxy.V_config;
 import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_error_question.ErrorQuestion;
 import com.sunland.jwyxy.bean.i_error_question.ErrorQuestionReqBean;
@@ -74,6 +73,8 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setToolbarLayout(R.layout.toolbar_test_main);
+        setContentLayout(R.layout.ac_paper_frame);
         handIntent();
         queryHzydjw(V_config.ERROR_QUESTION);
         initWidget();
@@ -92,13 +93,13 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
                 ErrorQuestionReqBean errorQuestionReqBean = new ErrorQuestionReqBean();
                 assembleBasicObj(errorQuestionReqBean);
                 errorQuestionReqBean.setCtzl(ctzl);
-                errorQuestionReqBean.setJyid(LocalInfo.jyid);
+                errorQuestionReqBean.setJyid(V_config.jyid);
                 return errorQuestionReqBean;
             case V_config.SUBMIT_PAPER_INFO:
                 SubmitPaperReqBean submitPaperReqBean = new SubmitPaperReqBean();
                 assembleBasicObj(submitPaperReqBean);
-                submitPaperReqBean.setJyid(LocalInfo.jyid);
-                submitPaperReqBean.setJymc(LocalInfo.jymc);
+                submitPaperReqBean.setJyid(V_config.jyid);
+                submitPaperReqBean.setJymc(V_config.jymc);
 //                submitPaperReqBean.setXfsjid(xfsjid);
 //                for (int i = 0; i < sparseArray.size(); i++) {
 //                    answer_list.add(sparseArray.get(sparseArray.keyAt(i)));
@@ -244,17 +245,6 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
     public void submitAnswer(SubmitQuestionInfo submitQuestionInfo, int tmid) {
         sparseArray.put(tmid, submitQuestionInfo);
     }
-
-    @Override
-    public int setToolbarLayout() {
-        return R.layout.toolbar_test_main;
-    }
-
-    @Override
-    public int setContentLayut() {
-        return R.layout.ac_paper_frame;
-    }
-
 
     public static void startActivity(Activity activity, Bundle bundle) {
         Intent intent = new Intent(activity, Ac_review_frame.class);

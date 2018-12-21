@@ -24,6 +24,8 @@ public class Ac_review_mode extends Ac_base {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setToolbarLayout( R.layout.toolbar_test_main);
+        setContentLayout( R.layout.ac_review_mode);
         initToolbar();
     }
 
@@ -33,15 +35,7 @@ public class Ac_review_mode extends Ac_base {
         iv_back.setImageResource(R.drawable.ic_arrow_back_black);
     }
 
-    @Override
-    public int setToolbarLayout() {
-        return R.layout.toolbar_test_main;
-    }
 
-    @Override
-    public int setContentLayut() {
-        return R.layout.ac_review_mode;
-    }
 
     @OnClick({R.id.back_press, R.id.order_container, R.id.random_container})
     public void onClick(View view) {

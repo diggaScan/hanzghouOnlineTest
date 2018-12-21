@@ -1,13 +1,13 @@
 package com.sunland.jwyxy;
 
 import android.Manifest;
+import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 
 import com.sunland.jwyxy.crash.CrashApplication;
-import com.sunlandgroup.Global;
 
 public class MyApplication extends CrashApplication {
 
@@ -16,16 +16,8 @@ public class MyApplication extends CrashApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        getPhoneInfo();
+        setPhoneInfo();
         getFlavour();
-
-    }
-
-
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-
     }
 
     private void getFlavour() {
@@ -40,26 +32,26 @@ public class MyApplication extends CrashApplication {
 
     }
 
+    //广达市场版
     public boolean isAppCyber() {
-        if (app_flavour == null)
-            return false;
         return app_flavour.equals("appCyber");
     }
 
-    public boolean isReleaseVersion() {
-        if (app_flavour == null)
-            return false;
-        if (app_flavour.equals("appCyber") || app_flavour.equals("app")) {
-            return true;
-        } else
-            return false;
+    //独立应用版
+    public boolean isIsoApp() {
+        return app_flavour.equals("app");
     }
 
-    private void getPhoneInfo() {
+    //正式发布版
+    public boolean isReleaseVersion() {
+        return (app_flavour.equals("appCyber") || app_flavour.equals("app"));
+    }
+
+    private void setPhoneInfo() {
         TelephonyManager tpm = (TelephonyManager) getSystemService(this.TELEPHONY_SERVICE);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-            Global.imei = tpm.getDeviceId();
-            Global.imsi1 = tpm.getSubscriberId();
+            V_config.imei = tpm.getDeviceId();
+            V_config.imsi1 = tpm.getSubscriberId();
         }
     }
 }

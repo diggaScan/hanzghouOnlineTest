@@ -1,9 +1,10 @@
 package com.sunland.jwyxy;
 
+import android.os.Build;
+
 public class V_config {
 
-    // 0.登录接口
-    public final static String USER_LOGIN = "queryUsermessage";
+
     // 1.考试个人统计信息
     public static final String PERSON_STATS = "queryPersonalStatsInfo";
     // 2. 获取考试列表信息
@@ -16,5 +17,25 @@ public class V_config {
     public static final String SUBMIT_PAPER_INFO = "savePaperInfo";
     // 6. 查询个人历史试卷信息
     public static final String HISTORY_PAPER = "queryHisPaperInfo";
+    // 7. 登录接口
+    public final static String USER_LOGIN = "userLogin";
+    // 8. 免密登录接口
+    public final static String MM_USER_LOGIN = "userMMLogin";
+
+    //本机信息
+    public final static String BRAND = Build.BRAND;//手机品牌
+    public final static String MODEL = Build.MODEL + " " + Build.VERSION.SDK_INT;//手机型号
+    public final static String OS = "android" + Build.VERSION.SDK_INT;//手机操作系统
+    public static String imei = "";
+    public static String imsi1 = " ";
+    public static String imsi2 = "";
+    public static String gpsX = "";//经度
+    public static String gpsY = "";//纬度
+    public static String gpsinfo = gpsX + gpsY;
+    //用户代码
+    public static String YHDM;
+
+    public static String jyid = "111772";//测试用
+    public static String jymc = "test";//测试用
 
 }

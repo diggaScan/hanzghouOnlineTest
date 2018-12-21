@@ -11,9 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sunland.jwyxy.V_config;
-import com.sunland.jwyxy.LocalInfo;
 import com.sunland.jwyxy.R;
+import com.sunland.jwyxy.V_config;
 import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_paper_list.PaperInfo;
 import com.sunland.jwyxy.bean.i_paper_list.PaperListReqBean;
@@ -41,6 +40,8 @@ public class Ac_paper_list extends Ac_base_query {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setToolbarLayout(R.layout.toolbar_test_main);
+        setContentLayout(R.layout.ac_paper_list);
         initToolbar();
         handleIntent();
         queryHzydjw(V_config.PAPER_LIST);
@@ -60,7 +61,7 @@ public class Ac_paper_list extends Ac_base_query {
     public BaseRequestBean assembleRequestObj(String reqName) {
         PaperListReqBean paperListReqBean = new PaperListReqBean();
         assembleBasicObj(paperListReqBean);
-        paperListReqBean.setJyid(LocalInfo.jyid);
+        paperListReqBean.setJyid(V_config.jyid);
         return paperListReqBean;
     }
 
@@ -105,15 +106,6 @@ public class Ac_paper_list extends Ac_base_query {
         rv_papers.addItemDecoration(new Rv_Item_decoration(this));
     }
 
-    @Override
-    public int setToolbarLayout() {
-        return R.layout.toolbar_test_main;
-    }
-
-    @Override
-    public int setContentLayut() {
-        return R.layout.ac_paper_list;
-    }
 
     @OnClick(R.id.back_press)
     public void onClick(View view) {

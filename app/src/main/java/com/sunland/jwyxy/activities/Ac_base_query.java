@@ -39,16 +39,16 @@ public abstract class Ac_base_query extends Ac_base implements OnRequestCallback
                 , assembleRequestObj(reqName), 15000);
         mRequestManager.postRequestWithoutDialog();
     }
-    public void assembleBasicObj(BaseRequestBean baseRequestBean) {
-        baseRequestBean.setYhdm("test");
-        baseRequestBean.setImei(Global.imei);
-        baseRequestBean.setImsi(Global.imsi1);
+    public void assembleBasicObj(BaseRequestBean requestBean) {
+        requestBean.setYhdm(V_config.YHDM);
+        requestBean.setImei(V_config.imei);
+        requestBean.setImsi(V_config.imsi1);
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String pda_time = simpleDateFormat.format(date);
-        baseRequestBean.setPdaTime(pda_time);
-        baseRequestBean.setGpsX("");
-        baseRequestBean.setGpsY("");
+        requestBean.setPdaTime(pda_time);
+        requestBean.setGpsX(V_config.gpsX);
+        requestBean.setGpsY(V_config.gpsY);
     }
 
     @Override
@@ -75,15 +75,6 @@ public abstract class Ac_base_query extends Ac_base implements OnRequestCallback
         return null;
     }
 
-    @Override
-    public int setToolbarLayout() {
-        return 0;
-    }
-
-    @Override
-    public int setContentLayut() {
-        return 0;
-    }
 
     public abstract BaseRequestBean assembleRequestObj(String reqName);
 

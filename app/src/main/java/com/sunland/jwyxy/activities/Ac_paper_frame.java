@@ -14,10 +14,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.sunland.jwyxy.V_config;
 import com.sunland.jwyxy.Frg_quiz;
-import com.sunland.jwyxy.LocalInfo;
 import com.sunland.jwyxy.R;
+import com.sunland.jwyxy.V_config;
 import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_paper_detail.PaperDetailReqBean;
 import com.sunland.jwyxy.bean.i_paper_detail.PaperDetailResBean;
@@ -59,6 +58,7 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
     public ImageView answer_tab;
     @BindView(R.id.loading_icon)
     public RelativeLayout rl_loading_icon;
+
     private boolean isTabClicked;
     private boolean hasGetAnswers;
 
@@ -85,23 +85,14 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setToolbarLayout(R.layout.toolbar_test_main);
+        setContentLayout(R.layout.ac_paper_frame);
         answer_list = new ArrayList<>();
         handIntent();
         initToolbar();
         questionList = new ArrayList<>();
         queryHzydjw(V_config.PAPER_DETAIL);
     }
-
-    @Override
-    public int setToolbarLayout() {
-        return R.layout.toolbar_test_main;
-    }
-
-    @Override
-    public int setContentLayut() {
-        return R.layout.ac_paper_frame;
-    }
-
 
     private void handIntent() {
         Intent intent = getIntent();
@@ -122,16 +113,15 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
             case V_config.PAPER_DETAIL:
                 PaperDetailReqBean paperDetailReqBean = new PaperDetailReqBean();
                 assembleBasicObj(paperDetailReqBean);
-                paperDetailReqBean.setJyid(LocalInfo.jyid);
+                paperDetailReqBean.setJyid(V_config.jyid);
                 paperDetailReqBean.setXfsjid(xfsjid);
                 return paperDetailReqBean;
             case V_config.SUBMIT_PAPER_INFO:
                 SubmitPaperReqBean submitPaperReqBean = new SubmitPaperReqBean();
                 assembleBasicObj(submitPaperReqBean);
-                submitPaperReqBean.setJyid(LocalInfo.jyid);
-                submitPaperReqBean.setJymc(LocalInfo.jymc);
+                submitPaperReqBean.setJyid(V_config.jyid);
+                submitPaperReqBean.setJymc(V_config.jymc);
                 submitPaperReqBean.setXfsjid(xfsjid);
-
                 for (int i = 0; i < sparseArray.size(); i++) {
                     answer_list.add(sparseArray.get(sparseArray.keyAt(i)));
                 }
@@ -218,7 +208,6 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
         toolbar.setFitsSystemWindows(false);
     }
 
-
     private void initToolbar() {
         toolbar_title.setText(mTitle);
         toolbar_title.setTextColor(Color.BLACK);
@@ -227,9 +216,7 @@ public class Ac_paper_frame extends Ac_base_query implements Frg_quiz.CommChanne
 
     private void initViewPager() {
         fragments = new ArrayList<>();
-
         Collections.sort(questionList);
-
         int num = questionList.size();
         for (int i = 0; i < num; i++) {
             Frg_quiz frg_quiz = new Frg_quiz();
