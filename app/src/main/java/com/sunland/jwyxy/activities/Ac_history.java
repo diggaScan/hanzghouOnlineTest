@@ -8,11 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.sunland.jwyxy.V_config;
 import com.sunland.jwyxy.R;
+import com.sunland.jwyxy.V_config;
 import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_history_paper.HistoryPaperInfo;
 import com.sunland.jwyxy.bean.i_history_paper.HistoryPaperReqBean;
@@ -33,7 +35,8 @@ public class Ac_history extends Ac_base_query {
     public ImageView iv_back;
     @BindView(R.id.history_papers)
     public RecyclerView rv_papers;
-
+    @BindView(R.id.loading_layout)
+    public FrameLayout loading_layout;
     private List<HistoryPaperInfo> paper_list;
     private MyRvAdapter adapter;
 
@@ -43,7 +46,7 @@ public class Ac_history extends Ac_base_query {
         setToolbarLayout(R.layout.toolbar_test_main);
         setContentLayout(R.layout.ac_history);
         initToolbar();
-        queryHzydjw(V_config.HISTORY_PAPER);
+        queryHzydjwNoDialog(V_config.HISTORY_PAPER);
     }
 
     private void initToolbar() {
@@ -56,7 +59,7 @@ public class Ac_history extends Ac_base_query {
     public BaseRequestBean assembleRequestObj(String reqName) {
         HistoryPaperReqBean historyPaperReqBean = new HistoryPaperReqBean();
         assembleBasicObj(historyPaperReqBean);
-        historyPaperReqBean.setJyid(V_config.jyid);
+        historyPaperReqBean.setJyid(V_config.YHDM);
         return historyPaperReqBean;
     }
 
@@ -64,7 +67,17 @@ public class Ac_history extends Ac_base_query {
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase bean) {
         HistoryPaperResBean historyPaperResBean = (HistoryPaperResBean) bean;
+        if (historyPaperResBean == null) {
+            Toast.makeText(this, "后台接口异常", Toast.LENGTH_SHORT).show();
+            return;
+        }
         paper_list = historyPaperResBean.getHistoryPaperInfo();
+        if (paper_list == null || paper_list.isEmpty()) {
+            Toast.makeText(this, "历史记录为空", Toast.LENGTH_SHORT).show();
+            loading_layout.setVisibility(View.GONE);
+            return;
+        }
+        loading_layout.setVisibility(View.GONE);
         initRv();
     }
 

@@ -10,6 +10,7 @@ import com.sunland.jwyxy.bean.i_history_paper.HistoryPaperResBean;
 import com.sunland.jwyxy.bean.i_paper_detail.PaperDetailResBean;
 import com.sunland.jwyxy.bean.i_paper_list.PaperListResBean;
 import com.sunland.jwyxy.bean.i_person_stats.PersonStatsResBean;
+import com.sunland.jwyxy.bean.i_submit_error.SubmitErrorResBean;
 import com.sunland.jwyxy.bean.i_submit_paper.SubmitPaperResBean;
 import com.sunlandgroup.Global;
 import com.sunlandgroup.def.bean.result.ResultBase;
@@ -34,11 +35,13 @@ public abstract class Ac_base_query extends Ac_base implements OnRequestCallback
                 , assembleRequestObj(reqName), 15000);
         mRequestManager.postRequest();
     }
+
     public void queryHzydjwNoDialog(String reqName) {
         mRequestManager.addRequest(Global.ip, Global.port, Global.postfix, reqName
                 , assembleRequestObj(reqName), 15000);
         mRequestManager.postRequestWithoutDialog();
     }
+
     public void assembleBasicObj(BaseRequestBean requestBean) {
         requestBean.setYhdm(V_config.YHDM);
         requestBean.setImei(V_config.imei);
@@ -71,6 +74,8 @@ public abstract class Ac_base_query extends Ac_base implements OnRequestCallback
                 return SubmitPaperResBean.class;
             case V_config.HISTORY_PAPER:
                 return HistoryPaperResBean.class;
+            case V_config.SUBMIT_ERROR_QUIZS:
+                return SubmitErrorResBean.class;
         }
         return null;
     }

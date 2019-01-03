@@ -22,7 +22,6 @@ public abstract class Ac_base extends AppCompatActivity {
     public LinearLayout rootview;
     public MyApplication mApplication;
     public DialogUtils dialogUtils;
-
     private LayoutInflater layoutInflater;
 
     @Override
@@ -38,6 +37,7 @@ public abstract class Ac_base extends AppCompatActivity {
         }
         layoutInflater = LayoutInflater.from(this);
         dialogUtils = DialogUtils.getInstance();
+
     }
 
     public void setToolbarLayout(int layout) {
@@ -49,16 +49,19 @@ public abstract class Ac_base extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-
     public void saveLog(int operateType, int operationResult, String operateCondition) {
-        OperationLog.saveLog(this
-                , getTitle().toString()
-                , "com.sunland.jwyxy"
-                , "jwyxy"
-                , operateType
-                , OperationLog.OperationResult.CODE_SUCCESS
-                , 1
-                , operateCondition);
+        try {
+            OperationLog.saveLog(this
+                    , getApplication().getPackageName()
+                    , getApplication().getPackageName()
+                    , operateType
+                    , OperationLog.OperationResult.CODE_SUCCESS
+                    , 1
+                    , operateCondition);
+        } catch (Exception e) {
+            //未适配Fileprovider
+            e.printStackTrace();
+        }
     }
 
     public String appendString(String... strings) {

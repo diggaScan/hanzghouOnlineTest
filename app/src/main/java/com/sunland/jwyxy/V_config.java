@@ -21,6 +21,8 @@ public class V_config {
     public final static String USER_LOGIN = "userLogin";
     // 8. 免密登录接口
     public final static String MM_USER_LOGIN = "userMMLogin";
+    // 9. 错题练习提交接口
+    public final static String SUBMIT_ERROR_QUIZS = "practiceErrorQuestion";
 
     //本机信息
     public final static String BRAND = Build.BRAND;//手机品牌
@@ -34,8 +36,8 @@ public class V_config {
     public static String gpsinfo = gpsX + gpsY;
     //用户代码
     public static String YHDM;
-
-    public static String jyid = "111772";//测试用
-    public static String jymc = "test";//测试用
+    public final static String DLMK = "警务云学院";
+    //    public static String jyid = "012146";//测试用111772
+    public static String JYMC;//测试用
 
 }

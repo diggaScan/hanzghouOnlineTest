@@ -1,6 +1,5 @@
 package com.sunland.jwyxy.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -11,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +23,9 @@ import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_error_question.ErrorQuestion;
 import com.sunland.jwyxy.bean.i_error_question.ErrorQuestionReqBean;
 import com.sunland.jwyxy.bean.i_error_question.ErrorQuestionResBean;
-import com.sunland.jwyxy.bean.i_submit_paper.SubmitPaperReqBean;
+import com.sunland.jwyxy.bean.i_submit_error.SubmitErrorReqBean;
+import com.sunland.jwyxy.bean.i_submit_error.SubmitErrorResBean;
+import com.sunland.jwyxy.bean.i_submit_paper.ResultQuestionInfo;
 import com.sunland.jwyxy.bean.i_submit_paper.SubmitQuestionInfo;
 import com.sunland.jwyxy.config_utils.DialogUtils;
 import com.sunland.jwyxy.config_utils.viewpager_config.MyFragmentAdapter;
@@ -54,8 +56,11 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
     public Button btn_submit;
     @BindView(R.id.answer_tab)
     public ImageView iv_tab;
-
+    @BindView(R.id.loading_layout)
+    public FrameLayout loading_layout;
     private MyFragmentAdapter<Frg_error_quiz> myFragmentAdapter;
+    private DialogUtils dialogUtils;
+    private boolean hasGetAnswers;
 
     private HashMap<Integer, Integer> answer_sheet = new HashMap<>();
 
@@ -65,18 +70,26 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
     private List<String> titles;
     private List<String[]> choices;
     private int paper_code;
-
+    private List<Frg_error_quiz> fragments;
+    private List<SubmitQuestionInfo> answer_list;//提交的错题答案列表
     private int ctzl;
     private List<ErrorQuestion> question_list;
     private SparseArray<SubmitQuestionInfo> sparseArray = new SparseArray<>();
+    private List<ResultQuestionInfo> result_list;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setToolbarLayout(R.layout.toolbar_test_main);
         setContentLayout(R.layout.ac_paper_frame);
+        question_list = new ArrayList<>();
+        answer_list = new ArrayList<>();
         handIntent();
-        queryHzydjw(V_config.ERROR_QUESTION);
+        dialogUtils = new DialogUtils(this);
+        dialogUtils.initDialog();
+        queryHzydjwNoDialog(V_config.ERROR_QUESTION);
+        btn_submit.setVisibility(View.GONE);
+        iv_back.setVisibility(View.GONE);
         initWidget();
     }
 
@@ -93,18 +106,17 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
                 ErrorQuestionReqBean errorQuestionReqBean = new ErrorQuestionReqBean();
                 assembleBasicObj(errorQuestionReqBean);
                 errorQuestionReqBean.setCtzl(ctzl);
-                errorQuestionReqBean.setJyid(V_config.jyid);
+                errorQuestionReqBean.setJyid(V_config.YHDM);
                 return errorQuestionReqBean;
-            case V_config.SUBMIT_PAPER_INFO:
-                SubmitPaperReqBean submitPaperReqBean = new SubmitPaperReqBean();
+            case V_config.SUBMIT_ERROR_QUIZS:
+                SubmitErrorReqBean submitPaperReqBean = new SubmitErrorReqBean();
                 assembleBasicObj(submitPaperReqBean);
-                submitPaperReqBean.setJyid(V_config.jyid);
-                submitPaperReqBean.setJymc(V_config.jymc);
-//                submitPaperReqBean.setXfsjid(xfsjid);
-//                for (int i = 0; i < sparseArray.size(); i++) {
-//                    answer_list.add(sparseArray.get(sparseArray.keyAt(i)));
-//                }
-//                submitPaperReqBean.setSubmitQuestionInfo(answer_list);
+                submitPaperReqBean.setErrType(Integer.valueOf(ctzl));
+                submitPaperReqBean.setJyid(V_config.YHDM);
+                for (int i = 0; i < sparseArray.size(); i++) {
+                    answer_list.add(sparseArray.get(sparseArray.keyAt(i)));
+                }
+                submitPaperReqBean.setSubmitQuestionInfo(answer_list);
                 return submitPaperReqBean;
         }
         return null;
@@ -112,19 +124,53 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
 
     @Override
     public void onDataResponse(String reqId, String reqName, ResultBase bean) {
-        ErrorQuestionResBean errorQuestionResBean = (ErrorQuestionResBean) bean;
-        if (errorQuestionResBean != null) {
-            question_list = errorQuestionResBean.getErrorQuestionInfo();
-            if (question_list == null || question_list.isEmpty()) {
-                Toast.makeText(this, "无最近考试列表", Toast.LENGTH_SHORT).show();
-            } else {
-                initViewPager();
-            }
-        } else {
-            Toast.makeText(this, "接口异常", Toast.LENGTH_SHORT).show();
-
+        switch (reqName) {
+            case V_config.ERROR_QUESTION:
+                btn_submit.setVisibility(View.VISIBLE);
+                iv_back.setVisibility(View.VISIBLE);
+                loading_layout.setVisibility(View.GONE);
+                ErrorQuestionResBean errorQuestionResBean = (ErrorQuestionResBean) bean;
+                if (errorQuestionResBean == null) {
+                    Toast.makeText(this, "错题接口异常", Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                }
+                question_list = errorQuestionResBean.getErrorQuestionInfo();
+                if (question_list == null || question_list.isEmpty()) {
+                    Toast.makeText(this, "无相关错题", Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                } else {
+                    initViewPager();
+                }
+                break;
+            case V_config.SUBMIT_ERROR_QUIZS:
+                hasGetAnswers = true;//已获取答案
+                vp_container.setCurrentItem(0);
+                iv_back.setVisibility(View.VISIBLE);
+                loading_layout.setVisibility(View.GONE);
+                btn_submit.setVisibility(View.VISIBLE);
+                btn_submit.setVisibility(View.VISIBLE);
+                btn_submit.setText("确  定");
+                SubmitErrorResBean submitErrorResBean = (SubmitErrorResBean) bean;
+                if (submitErrorResBean == null) {
+                    Toast.makeText(this, "后台接口异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                result_list = submitErrorResBean.getResultQuestionInfo();
+                if (result_list == null || result_list.isEmpty()) {
+                    Toast.makeText(this, "获取题目答案异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                for (Frg_error_quiz frg_error_quiz : fragments) {
+                    for (ResultQuestionInfo resultQuestionInfo : result_list) {
+                        if (frg_error_quiz.tmid == resultQuestionInfo.getTmid()) {
+                            frg_error_quiz.setResult(resultQuestionInfo.getSfzq(), resultQuestionInfo.getZqxx());
+                        }
+                    }
+                }
+                break;
         }
-
     }
 
     private void initDecorView() {
@@ -146,7 +192,7 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
     }
 
     private void initWidget() {
-        toolbar_title.setText(mTitle);
+        toolbar_title.setText(ctzl == 1 ? "个人错题" : "全员错题");
         toolbar_title.setTextColor(Color.BLACK);
         iv_back.setImageResource(R.drawable.ic_close_black);
         tv_count_down.setVisibility(View.GONE);
@@ -154,8 +200,7 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
     }
 
     private void initViewPager() {
-        List<Frg_error_quiz> fragments = new ArrayList<>();
-
+        fragments = new ArrayList<>();
         for (int i = 0; i < question_list.size(); i++) {
             Frg_error_quiz error_quiz = new Frg_error_quiz();
             error_quiz.setQuestion(question_list.get(i), i + 1, question_list.size());
@@ -204,22 +249,23 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
         int id = view.getId();
         switch (id) {
             case R.id.back_press:
-                onBackPressed();
+                exit();
                 break;
             case R.id.submit:
-//                Ac_main.startActivity(this);
-                submit();
+                if (hasGetAnswers) {
+                    exit();
+                } else {
+                    submit();
+                }
                 break;
-
         }
     }
 
     private void submit() {
-        final DialogUtils dialogUtils = new DialogUtils(this);
-        dialogUtils.initDialog();
+
         dialogUtils.setTitle("确定要提交试卷?");
         if (answer_sheet.size() < question_list.size()) {
-            dialogUtils.setDescription("你还有题目未完成");
+            dialogUtils.setDescription("已做习题将被提交");
         } else {
             dialogUtils.setDescription("你已完成所有试题");
         }
@@ -233,9 +279,11 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
         dialogUtils.setOnConfirmListener(new DialogUtils.onConfirmListener() {
             @Override
             public void onConfirm() {
-//                queryHzydjw(V_config.SUBMIT_PAPER_INFO);
-                finish();
-
+                dialogUtils.dismiss();
+                loading_layout.setVisibility(View.VISIBLE);
+                btn_submit.setVisibility(View.GONE);
+                iv_back.setVisibility(View.GONE);
+                queryHzydjwNoDialog(V_config.SUBMIT_ERROR_QUIZS);
             }
         });
         dialogUtils.show();
@@ -246,10 +294,32 @@ public class Ac_review_frame extends Ac_base_query implements Frg_quiz.CommChann
         sparseArray.put(tmid, submitQuestionInfo);
     }
 
-    public static void startActivity(Activity activity, Bundle bundle) {
-        Intent intent = new Intent(activity, Ac_review_frame.class);
-        intent.putExtra(FLAG, bundle);
-        activity.startActivity(intent);
+    private void exit() {
+        dialogUtils.setTitle("确定退出错题练习吗?");
+        if (hasGetAnswers) {
+            dialogUtils.setDescription("题目已提交");
+        } else {
+            dialogUtils.setDescription("答案将不会被提交");
+        }
+
+        dialogUtils.setOnCancelListener(new DialogUtils.OnCancelListener() {
+            @Override
+            public void onCancel() {
+                dialogUtils.dismiss();
+            }
+        });
+        dialogUtils.setOnConfirmListener(new DialogUtils.onConfirmListener() {
+            @Override
+            public void onConfirm() {
+                dialogUtils.dismiss();
+                finish();
+            }
+        });
+        dialogUtils.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        exit();
+    }
 }

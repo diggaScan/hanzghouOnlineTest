@@ -11,10 +11,10 @@
 
     <android.support.v4.view.ViewPager
         android:id="@+id/quiz_container"
-        android:layout_marginBottom="95dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="1dp" />
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="95dp" />
 
     <TextView
         android:id="@+id/count_down"
@@ -49,33 +49,6 @@
         android:text="提   交"
         android:textColor="@color/white"
         android:textSize="20sp" />
-    <RelativeLayout
-        android:id="@+id/loading_icon"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
 
-        <ProgressBar
-            android:id="@+id/progress"
-            style="@android:style/Widget.Holo.Light.ProgressBar.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="bottom|center_horizontal"
-            android:indeterminate="true"
-            android:maxWidth="60dp"
-            android:maxHeight="60dp"
-            android:minWidth="60dp"
-            android:minHeight="60dp" />
-
-        <TextView
-            android:id="@+id/tip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/progress"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:text="批改试卷中..." />
-    </RelativeLayout>
-
+    <include layout="@layout/loading_layout" />
 </FrameLayout>

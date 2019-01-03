@@ -50,6 +50,5 @@ public abstract class CheckSelfPermissionActivity extends Ac_base {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
     }
 }

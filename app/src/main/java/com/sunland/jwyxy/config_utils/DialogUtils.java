@@ -31,6 +31,7 @@ public class DialogUtils {
     private onConfirmListener onConfirmListener;
 
     private Window mWindow;
+    private boolean hasShown;
 
     public DialogUtils(Context context) {
         this.mContext = context;
@@ -81,25 +82,37 @@ public class DialogUtils {
     }
 
     public void setTitle(String title) {
+        if (hasShown)
+            return;
         tv_title.setText(title);
     }
 
     public void setDescription(String description) {
+        if (hasShown)
+            return;
         tv_description.setText(description);
     }
 
     public void show() {
+        if (hasShown)
+            return;
+
         if (onCancelListener == null) {
             btn_cancel.setVisibility(View.GONE);
             divider.setVisibility(View.GONE);
         }
         pop_window.showAtLocation(mWindow.getDecorView(), Gravity.CENTER, 0, 0);
+        hasShown = true;
         dimWindow();
     }
 
     public void dismiss() {
+        if (!hasShown)
+            return;
+
         pop_window.dismiss();
         restoreDimWindow();
+        hasShown = false;
     }
 
     private void dimWindow() {
@@ -117,10 +130,14 @@ public class DialogUtils {
     }
 
     public void setOnCancelListener(OnCancelListener onCancelListener) {
+        if (hasShown)
+            return;
         this.onCancelListener = onCancelListener;
     }
 
     public void setOnConfirmListener(DialogUtils.onConfirmListener onConfirmListener) {
+        if (hasShown)
+            return;
         this.onConfirmListener = onConfirmListener;
     }
 

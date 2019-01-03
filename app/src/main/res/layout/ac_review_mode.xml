@@ -59,7 +59,7 @@
             android:layout_below="@id/baseline1"
             android:layout_toRightOf="@id/icon1"
             android:paddingTop="10dp"
-            android:text="按照错题产生的时间依次练习" />
+            android:text="随机从个人错题库中抽取一定数量试题" />
     </RelativeLayout>
 
     <View
@@ -116,9 +116,8 @@
             android:layout_below="@id/baseline2"
             android:layout_toRightOf="@id/icon2"
             android:paddingTop="10dp"
-            android:text="随记从错题库中抽取错题进行练习" />
+            android:text="随机从全员错题库中抽取一定数量试题" />
     </RelativeLayout>
-
 
     <View
         android:layout_width="match_parent"

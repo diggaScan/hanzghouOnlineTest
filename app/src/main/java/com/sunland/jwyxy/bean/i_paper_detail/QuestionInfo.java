@@ -6,7 +6,7 @@ public class QuestionInfo implements Comparable<QuestionInfo> {
     private int tmid;// 题目id
     private String tmmc;//题目名称（题干）
     private String tmlx;// 题目类型,
-    private String tifl;// 题型分类 1判断2单选3多选
+    private String tifl;// 题型分类 3判断2多选1单选
     private int tmxh;//题目序号
     private List<ChoiceInfo> choiceInfo;//选项信息列表
 
@@ -61,7 +61,12 @@ public class QuestionInfo implements Comparable<QuestionInfo> {
     @Override
     public int compareTo(QuestionInfo o) {
         if (this.tmxh == 0) {
-            return o.tifl.compareTo(this.tifl);
+            if(this.tifl.equals("3")){
+                return -1;
+            }else if(o.tifl.equals("3")) {
+                return 1;
+            }
+            return this.tifl.compareTo(o.tifl);
         } else {
             return this.tmxh - o.tmxh;
         }

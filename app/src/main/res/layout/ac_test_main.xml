@@ -1,243 +1,250 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="8"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@id/middle"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/total_exercise"
-                    android:layout_centerInParent="true"
-                    android:text="答题总数"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:id="@+id/total_exercise"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textColor="@color/white" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/total_paper"
-                    android:layout_centerInParent="true"
-                    android:text="已做试卷"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:id="@+id/total_paper"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textColor="@color/white" />
-            </RelativeLayout>
-        </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/middle"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/ac_main_history_selector"
-            android:gravity="center"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:text="历史"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:typeface="sans" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_toRightOf="@id/middle"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/accuracy_mean"
-                    android:layout_centerInParent="true"
-                    android:text="平均正确率"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:id="@+id/accuracy_mean"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textColor="@color/white" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/result_mean"
-                    android:layout_centerInParent="true"
-                    android:text="平均成绩"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:id="@+id/result_mean"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textColor="@color/white" />
-            </RelativeLayout>
-        </LinearLayout>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/test_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"
-        android:background="@color/white">
-
-        <ImageView
-            android:id="@+id/icon1"
-            android:layout_width="31dp"
-            android:layout_height="39dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:background="@drawable/test" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/baseline"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/ic_spinner_arrow" />
-
-        <TextView
-            android:id="@+id/test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/baseline"
-            android:layout_toRightOf="@id/icon1"
-            android:paddingBottom="10dp"
-            android:text="真题测验"
-            android:textColor="@color/black"
-            android:textSize="18dp"
-            android:typeface="serif" />
-
-        <View
-            android:id="@+id/baseline"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_centerInParent="true" />
+            android:layout_weight="8"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/test_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/baseline"
-            android:layout_toRightOf="@id/icon1"
-            android:paddingTop="10dp"
-            android:text="由警务云学院自动生成在线测试题，帮助警员更加高效，便捷的完成学习测试" />
-    </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@id/middle"
+                android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/review_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"
-        android:background="@color/white">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
-        <ImageView
-            android:id="@+id/icon2"
-            android:layout_width="31dp"
-            android:layout_height="39dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:background="@drawable/review" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@id/total_exercise"
+                        android:layout_centerInParent="true"
+                        android:text="答题总数"
+                        android:textColor="@color/white" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/baseline1"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/ic_spinner_arrow" />
+                    <TextView
+                        android:id="@+id/total_exercise"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:textColor="@color/white" />
+                </RelativeLayout>
 
-        <TextView
-            android:id="@+id/review"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/baseline1"
-            android:layout_toRightOf="@id/icon2"
-            android:paddingBottom="10dp"
-            android:text="错题练习"
-            android:textColor="@color/black"
-            android:textSize="18dp"
-            android:typeface="serif" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
-        <View
-            android:id="@+id/baseline1"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@id/total_paper"
+                        android:layout_centerInParent="true"
+                        android:text="已做试卷"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/total_paper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:textColor="@color/white" />
+                </RelativeLayout>
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/middle"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ac_main_history_selector"
+                android:gravity="center"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="历史"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:typeface="sans" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_toRightOf="@id/middle"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@id/accuracy_mean"
+                        android:layout_centerInParent="true"
+                        android:text="平均正确率"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/accuracy_mean"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:textColor="@color/white" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@id/result_mean"
+                        android:layout_centerInParent="true"
+                        android:text="平均成绩"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/result_mean"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:textColor="@color/white" />
+                </RelativeLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/test_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_centerInParent="true" />
+            android:layout_weight="5"
+            android:background="@color/white">
 
-        <TextView
-            android:id="@+id/review_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/baseline1"
-            android:layout_toRightOf="@id/icon2"
-            android:paddingTop="10dp"
-            android:text="根据警员测试记录，动态智能的为警员定制错题回顾" />
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/icon1"
+                android:layout_width="31dp"
+                android:layout_height="39dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:background="@drawable/test" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"
-        android:background="@color/white"></RelativeLayout>
-</LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/baseline"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/ic_spinner_arrow" />
+
+            <TextView
+                android:id="@+id/test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/baseline"
+                android:layout_toRightOf="@id/icon1"
+                android:paddingBottom="10dp"
+                android:text="真题测验"
+                android:textColor="@color/black"
+                android:textSize="18dp"
+                android:typeface="serif" />
+
+            <View
+                android:id="@+id/baseline"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_centerInParent="true" />
+
+            <TextView
+                android:id="@+id/test_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/baseline"
+                android:layout_toRightOf="@id/icon1"
+                android:paddingTop="10dp"
+                android:text="由警务云学院自动生成在线测试题，帮助警员更加高效，便捷的完成学习测试" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/review_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/icon2"
+                android:layout_width="31dp"
+                android:layout_height="39dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:background="@drawable/review" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/baseline1"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/ic_spinner_arrow" />
+
+            <TextView
+                android:id="@+id/review"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/baseline1"
+                android:layout_toRightOf="@id/icon2"
+                android:paddingBottom="10dp"
+                android:text="错题练习"
+                android:textColor="@color/black"
+                android:textSize="18dp"
+                android:typeface="serif" />
+
+            <View
+                android:id="@+id/baseline1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_centerInParent="true" />
+
+            <TextView
+                android:id="@+id/review_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/baseline1"
+                android:layout_toRightOf="@id/icon2"
+                android:paddingTop="10dp"
+                android:text="根据警员测试记录，动态智能的为警员定制错题回顾" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:background="@color/white" />
+    </LinearLayout>
+
+    <include layout="@layout/loading_layout" />
+</FrameLayout>

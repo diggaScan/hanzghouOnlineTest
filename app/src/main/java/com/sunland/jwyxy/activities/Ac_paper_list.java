@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +35,8 @@ public class Ac_paper_list extends Ac_base_query {
     public ImageView iv_back;
     @BindView(R.id.recycle_view)
     public RecyclerView rv_papers;
-
+    @BindView(R.id.loading_layout)
+    public FrameLayout loading_layout;
     private List<PaperInfo> paper_list;
 
     @Override
@@ -44,7 +46,7 @@ public class Ac_paper_list extends Ac_base_query {
         setContentLayout(R.layout.ac_paper_list);
         initToolbar();
         handleIntent();
-        queryHzydjw(V_config.PAPER_LIST);
+        queryHzydjwNoDialog(V_config.PAPER_LIST);
     }
 
     private void handleIntent() {
@@ -61,7 +63,7 @@ public class Ac_paper_list extends Ac_base_query {
     public BaseRequestBean assembleRequestObj(String reqName) {
         PaperListReqBean paperListReqBean = new PaperListReqBean();
         assembleBasicObj(paperListReqBean);
-        paperListReqBean.setJyid(V_config.jyid);
+        paperListReqBean.setJyid(V_config.YHDM);
         return paperListReqBean;
     }
 
@@ -69,14 +71,17 @@ public class Ac_paper_list extends Ac_base_query {
     public void onDataResponse(String reqId, String reqName, ResultBase bean) {
         PaperListResBean paperListResBean = (PaperListResBean) bean;
         if (paperListResBean == null) {
+            loading_layout.setVisibility(View.GONE);
             Toast.makeText(this, "后台接口异常", Toast.LENGTH_SHORT).show();
             return;
         }
         paper_list = paperListResBean.getPaperInfo();
         if (paper_list == null || paper_list.isEmpty()) {
+            loading_layout.setVisibility(View.GONE);
             Toast.makeText(this, "试卷列表为空", Toast.LENGTH_SHORT).show();
             return;
         }
+        loading_layout.setVisibility(View.GONE);
         initRecycleView();
     }
 

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sunland.jwyxy.bean.i_error_question.ErrorQuestion;
@@ -42,21 +43,23 @@ public class Frg_error_quiz extends Frg_base {
     public TextView tv_line;
     @BindView(R.id.tip)
     public TextView tv_tip;
+    @BindView(R.id.sfzq)
+    public ImageView iv_sfzq; //是否正确的图标
+    @BindView(R.id.zqxx)
+    public TextView tv_zqxx; //正确选项
+    @BindView(R.id.zqxx_des)
+    public TextView tv_zxx_des;//正确选项描述
 
     private Button clicked_btn = null;
-
-
     private Context mContext;
-
     private ErrorQuestion questionInfo;
-
-    public String tifl;// 1判断2单选3多选
+    public String tifl;//  3判断2多选1单选
     public int seq_num;
     public int total_num;
     private List<ChoiceInfo> choice_List;
     private MyChoiceAdapter choices_adapter;
     private SubmitQuestionInfo submitQuestionInfo;
-
+    public int tmid;
     private int order;
     private int size;
 
@@ -70,6 +73,7 @@ public class Frg_error_quiz extends Frg_base {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
+        submitQuestionInfo = new SubmitQuestionInfo();
         return view;
     }
 
@@ -90,13 +94,13 @@ public class Frg_error_quiz extends Frg_base {
         tv_order.setText(seq_num + "");
         tv_question.setText(questionInfo.getTmmc());
         switch (tifl) {
-            case "2":
+            case "1":
                 tv_kind.setText("单选题");
                 break;
-            case "3":
+            case "2":
                 tv_kind.setText("多选题");
                 break;
-            case "1":
+            case "3":
                 tv_kind.setText("判断题");
                 break;
         }
@@ -109,7 +113,7 @@ public class Frg_error_quiz extends Frg_base {
     private void changeStyleIfClick(Button button, String btn_id) {
         boolean hasChosen = (boolean) button.getTag();
         switch (tifl) {
-            case "3"://多选题
+            case "2"://多选题
                 if (hasChosen) {
                     button.setBackgroundResource(R.drawable.quiz_choice_background);
                     button.setTextColor(getResources().getColor(R.color.med_color_primary));
@@ -121,7 +125,7 @@ public class Frg_error_quiz extends Frg_base {
                 }
                 break;
             case "1":
-            case "2":
+            case "3":
                 if (hasChosen) {
                     button.setBackgroundResource(R.drawable.quiz_choice_background);
                     button.setTextColor(getResources().getColor(R.color.med_color_primary));
@@ -155,9 +159,26 @@ public class Frg_error_quiz extends Frg_base {
         ((Frg_quiz.CommChannel) mContext).submitAnswer(submitQuestionInfo, questionInfo.getTmid());
     }
 
+    public void setResult(int sfzq, String zqxx) {
+        tv_line.setVisibility(View.GONE);
+        tv_tip.setVisibility(View.GONE);
+        iv_sfzq.setVisibility(View.VISIBLE);
+        if (sfzq == 0) {//0为错误
+            iv_sfzq.setImageResource(R.drawable.ic_cross);
+            tv_zxx_des.setVisibility(View.VISIBLE);
+            tv_zqxx.setVisibility(View.VISIBLE);
+            tv_zqxx.setText(zqxx);
+        } else if (sfzq == 1) {//1为正确
+            iv_sfzq.setImageResource(R.drawable.ic_tick);
+        }
+        for (int i = 0; i < rv_choice_list.getChildCount(); i++) {
+            rv_choice_list.getChildAt(i).findViewById(R.id.xxid).setEnabled(false);
+        }
+    }
 
     public void setQuestion(ErrorQuestion question, int order, int size) {
         this.questionInfo = question;
+        this.tmid = question.getTmid();
         this.tifl = questionInfo.getTifl();
         this.order = order;
         this.size = size;
@@ -197,7 +218,7 @@ public class Frg_error_quiz extends Frg_base {
                 @Override
                 public void onClick(View v) {
                     changeStyleIfClick(myViewHolder.tv_xxid, info.getXxid());
-//                    submitAnswer();
+                    submitAnswer();
                 }
             });
             myViewHolder.tv_xxnr.setText(info.getXxnr());
