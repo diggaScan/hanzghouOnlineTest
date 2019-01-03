@@ -6,13 +6,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sunland.jwyxy.V_config;
 import com.sunland.jwyxy.R;
+import com.sunland.jwyxy.V_config;
 import com.sunland.jwyxy.bean.BaseRequestBean;
 import com.sunland.jwyxy.bean.i_person_stats.PersonStatsReqBean;
 import com.sunland.jwyxy.bean.i_person_stats.PersonStatsResBean;
@@ -44,17 +45,22 @@ public class Ac_main extends Ac_base_query {
     public TextView tv_result_mean;
     @BindView(R.id.middle)
     public TextView tv_history;
+    @BindView(R.id.loading_layout)
+    public FrameLayout loading_layout;
+
 
     private int backPressed_num = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setToolbarLayout(R.layout.toolbar_test_main);
         setContentLayout(R.layout.ac_test_main);
         toolbar_title.setText("警务云学院");
+        toolbar.setVisibility(View.GONE);
         iv_nav_back.setVisibility(View.GONE);
         initWindow();
-        queryHzydjw(V_config.PERSON_STATS);
+        queryHzydjwNoDialog(V_config.PERSON_STATS);
 
     }
 
@@ -62,8 +68,8 @@ public class Ac_main extends Ac_base_query {
     public BaseRequestBean assembleRequestObj(String reqName) {
         PersonStatsReqBean personStatsReqBean = new PersonStatsReqBean();
         assembleBasicObj(personStatsReqBean);
-        personStatsReqBean.setJyid(V_config.jyid);
-        personStatsReqBean.setJymc(V_config.jymc);
+        personStatsReqBean.setJyid(V_config.YHDM);
+        personStatsReqBean.setJymc(V_config.JYMC);
         return personStatsReqBean;
     }
 
@@ -72,11 +78,19 @@ public class Ac_main extends Ac_base_query {
         switch (reqName) {
             case V_config.PERSON_STATS:
                 PersonStatsResBean personStatsResBean = (PersonStatsResBean) bean;
+                if (personStatsResBean == null) {
+                    toolbar.setVisibility(View.VISIBLE);
+                    loading_layout.setVisibility(View.GONE);
+                    Toast.makeText(this, "后台接口异常", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 PersonalStat personalStat = personStatsResBean.getPersonalStats();
                 if (personalStat == null) {
                     Toast.makeText(this, "未获得统计数据", Toast.LENGTH_SHORT).show();
                 } else {
                     initScoreBoard(personalStat);
+                    toolbar.setVisibility(View.VISIBLE);
+                    loading_layout.setVisibility(View.GONE);
                 }
         }
     }
@@ -97,10 +111,19 @@ public class Ac_main extends Ac_base_query {
     public void initScoreBoard(PersonalStat personalStat) {
 
         tv_total_exercise.setText(String.valueOf(personalStat.getDtzs()) + "个");
-        tv_accuracy_mean.setText(personalStat.getZql() + "%");
         tv_total_paper.setText(String.valueOf(personalStat.getYzsj()) + "套");
-        tv_result_mean.setText((personalStat.getPjcj()) + "分");
 
+        if(personalStat.getZql()==null||personalStat.getZql().isEmpty()||personalStat.getZql().equals("null")){
+            tv_accuracy_mean.setText("未知");
+        }else {
+            tv_accuracy_mean.setText(personalStat.getZql() + "%");
+        }
+
+        if(personalStat.getPjcj()==null||personalStat.getPjcj().isEmpty()||personalStat.getPjcj().equals("null")){
+            tv_result_mean.setText("未知");
+        }else {
+            tv_result_mean.setText(personalStat.getZql() + "分");
+        }
 
     }
 
@@ -110,10 +133,10 @@ public class Ac_main extends Ac_base_query {
         Bundle bundle = new Bundle();
         switch (id) {
             case R.id.review_container:
-                Ac_review_mode.startActivity(this);
+                hop2Activity(Ac_review_mode.class);
                 break;
             case R.id.test_container:
-                bundle.putString("jyid", V_config.jyid);
+                bundle.putString("jyid", V_config.YHDM);
                 hop2Activity(Ac_paper_list.class, bundle);
                 break;
             case R.id.middle:
@@ -121,6 +144,7 @@ public class Ac_main extends Ac_base_query {
                 break;
         }
     }
+
     @Override
     public void onBackPressed() {
         if (backPressed_num != 1) {
