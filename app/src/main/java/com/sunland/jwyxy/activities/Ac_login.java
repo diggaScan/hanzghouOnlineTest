@@ -112,8 +112,8 @@ public class Ac_login extends Ac_base implements OnRequestCallback {
             return;
         }
 
-        Dljyxx dljyxx=loginResBean.getDljyxx();
-        if(dljyxx==null){
+        Dljyxx dljyxx = loginResBean.getDljyxx();
+        if (dljyxx == null) {
             Toast.makeText(this, loginResBean.getMessage(), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -122,7 +122,7 @@ public class Ac_login extends Ac_base implements OnRequestCallback {
         //code 1 登录失败
         if (loginResBean.getCode().equals("0")) {
             V_config.YHDM = et_username.getText().toString();
-            V_config.JYMC=dljyxx.getJyname();
+            V_config.JYMC = dljyxx.getJyname();
             saveLog(0, OperationLog.OperationResult.CODE_SUCCESS, appendString(V_config.YHDM, V_config.BRAND,
                     V_config.MODEL));//yhdm,手机品牌，手机型号，警号
             hop2Activity(Ac_main.class);

@@ -1,19 +1,31 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            keyAlias 'key0'
+            keyPassword '13567497155abc'
+            storeFile file('F:/asKeyStore/yptKeystore.jks')
+            storePassword '13567497155abc'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.sunland.jwyxy"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
     flavorDimensions "OnlineTest"
@@ -22,6 +34,7 @@ android {
         app {
             manifestPlaceholders = [FLAVOUR_VALUE: "app", CATEGORY_VALUE: "LAUNCHER", PLATEFORM_VALUE: "android"]
             dimension = "OnlineTest"
+            signingConfig signingConfigs.release
         }
         //演示版本
         demo {
@@ -37,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.github.ybq:Android-SpinKit:1.0.4'
     implementation 'com.android.support:multidex:1.0.3'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:28.0.0-alpha1'

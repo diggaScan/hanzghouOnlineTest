@@ -36,7 +36,7 @@ public class V_config {
     public static String gpsinfo = gpsX + gpsY;
     //用户代码
     public static String YHDM;
-    public final static String DLMK = "警务云学院";
+    public final static String DLMK = "3";
     //    public static String jyid = "012146";//测试用111772
     public static String JYMC;//测试用
 

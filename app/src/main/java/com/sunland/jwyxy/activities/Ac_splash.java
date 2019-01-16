@@ -39,7 +39,7 @@ public class Ac_splash extends CheckSelfPermissionActivity implements OnRequestC
             User user = cn.com.cybertech.pdk.UserInfo.getUser(this);
             try {
                 V_config.YHDM = user.getAccount();
-                V_config.JYMC=user.getName();
+                V_config.JYMC = user.getName();
             } catch (NullPointerException e) {
                 Toast.makeText(this, "无法获取警号", Toast.LENGTH_LONG).show();
                 finish();
