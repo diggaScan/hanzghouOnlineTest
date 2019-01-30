@@ -122,7 +122,7 @@ public class Ac_main extends Ac_base_query {
         if(personalStat.getPjcj()==null||personalStat.getPjcj().isEmpty()||personalStat.getPjcj().equals("null")){
             tv_result_mean.setText("未知");
         }else {
-            tv_result_mean.setText(personalStat.getZql() + "分");
+            tv_result_mean.setText(personalStat.getPjcj() + "分");
         }
 
     }
