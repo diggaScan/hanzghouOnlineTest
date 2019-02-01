@@ -107,7 +107,7 @@ public class Ac_splash extends CheckSelfPermissionActivity implements OnRequestC
 
     @Override
     public <T extends ResultBase> Class<?> getBeanClass(String reqId, String reqName) {
-        return ResultBase.class;
+        return LoginResBean.class;
     }
 
 }

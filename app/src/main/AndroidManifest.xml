@@ -47,7 +47,8 @@
         <activity
             android:name=".activities.Ac_login"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
-        <activity android:name=".activities.Ac_main" />
+        <activity android:name=".activities.Ac_main"
+            android:launchMode="singleTask"/>
         <activity android:name=".activities.Ac_paper_list" />
         <activity android:name=".activities.Ac_paper_frame" />
         <activity android:name=".activities.Ac_review_mode" />
